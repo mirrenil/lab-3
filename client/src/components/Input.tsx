@@ -14,7 +14,7 @@ const navigate = useNavigate();
       setUsername(value);
       /* socket.auth = { username: value }; */
       localStorage.setItem('user', value);
-      navigate('/')
+      navigate('/lobby');
      
   };
 
