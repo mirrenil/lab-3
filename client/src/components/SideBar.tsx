@@ -2,42 +2,49 @@ import React, { CSSProperties, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NewRoom from './NewRoom';
 // import { Icon } from '@iconify/react';
-
-//import { useSockets } from '../context/socket.context';
+import { useSockets } from '../Context/Socket.context';
 //import user from '../lady.png';
-
 
 const SideBar = () => {
   const [isAddNewRoomOpen, setIsAddNewRoomOpen] = useState(false);
-  //const { setUsername, currentRoom, username, rooms, setCurrentRoom } = useSockets();
+  const {  username, rooms, roomId, socket } = useSockets();
   const navigate = useNavigate();
 
 
   const handleOnLogOut = () => {
-    localStorage.removeItem('user');
+    //localStorage.removeItem('user');
     //setUsername(null)
     navigate('/');
+  }
+
+  const handleJoinRoom = (key: any) => {
+    if (key === roomId) return;
+    socket.emit("JOIN_ROOM", key);
+    // navigate('/chat');
+    // console.log('joined room')
   }
 
   return (
     <div style={sidebar}>
       <div>
        {/* <img src={user} alt="User" /> */}
-        <h1 style={{marginTop: "5rem"}}>username</h1>
-        
-        <h3>Fler rum</h3>
-        <h3>Fler rum</h3>
-        <h3>Fler rum</h3>
-        {/* <div>
-          {rooms.length ? (
-            rooms.map((room) => <AvailableRooms key={room.name} room={room} />)
-          ) : (
-            <span>No rooms to join</span>
-          )}
-        </div> */}
-          <button style={{border: 'none', backgroundColor: 'transparent', fontSize: "1.5rem", marginTop: "2rem"}}>currentRoom</button>
-  
-
+        <h1 style={{marginTop: "5rem"}}>{username}</h1>
+     
+        <ul >
+        {Object.keys(rooms).map((key: any) => {
+          return (
+            <div key={key}>
+              <button 
+              disabled={key === roomId}
+              onClick={() => handleJoinRoom(key)}
+              title={`Join ${rooms[key].name}`}
+              >
+                {rooms[key].name}
+              </button>
+            </div>
+          );
+        })}
+      </ul>
         <button style={btn} onClick={() => setIsAddNewRoomOpen(true)}>
           +
         </button>
