@@ -1,7 +1,7 @@
 import React, { CSSProperties, useState } from 'react';
-import AddNewRoom from './NewRoom';
-import { Icon } from '@iconify/react';
-import { useNavigate } from 'react-router-dom';
+import NewRoom from './NewRoom';
+//import { Icon } from '@iconify/react';
+
 //import { useSockets } from '../context/socket.context';
 //import user from '../lady.png';
 
@@ -41,10 +41,10 @@ const SideBar = () => {
           +
         </button>
         </div>
-        <AddNewRoom
+        <NewRoom
           open={isAddNewRoomOpen}
            onClose={() => setIsAddNewRoomOpen(false)} 
-        ></AddNewRoom>
+        ></NewRoom>
       
       <button 
       style={signOut} 
