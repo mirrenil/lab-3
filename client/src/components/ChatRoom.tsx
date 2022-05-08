@@ -47,8 +47,9 @@ const ChatRoom = () => {
 
 const rootstyle: CSSProperties = {
     border: "2px solid red",
-    height: "100%",
-    marginLeft: "180px", //Samma som sidebarens width
+    height: "60vh",
+    width: "70%",
+    marginLeft: "20%", //Samma som sidebarens width
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
@@ -87,5 +88,6 @@ export const buttonStyle: CSSProperties = {
   border: "none",
   cursor: "pointer",
   fontWeight: "bold",
+  marginTop: "1rem"
 };
 export default ChatRoom;
