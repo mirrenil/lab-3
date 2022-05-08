@@ -1,5 +1,5 @@
 import React, { CSSProperties, useState } from 'react';
-import AddNewRoom from './NewRoom';
+import NewRoom from './NewRoom';
 //import { Icon } from '@iconify/react';
 //import { useSockets } from '../context/socket.context';
 
@@ -36,10 +36,10 @@ const SideBar = () => {
           +
         </button>
         </div>
-        <AddNewRoom
+        <NewRoom
           open={isAddNewRoomOpen}
            onClose={() => setIsAddNewRoomOpen(false)} 
-        ></AddNewRoom>
+        ></NewRoom>
       
       <button 
       className="button" 
