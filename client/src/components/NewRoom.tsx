@@ -22,7 +22,7 @@ const NewRoom = ({ open, onClose }: Modal) => {
     setRoomName(roomName)
     //joinRoom(room);
     onClose();
-    navigate('/')
+    navigate('/chat')
     console.log('Room created!');
     return;
   };

@@ -1,7 +1,8 @@
 import React, { CSSProperties, useState } from 'react';
-import AddNewRoom from './AddNewRoom';
-//import { Icon } from '@iconify/react';
+import AddNewRoom from './NewRoom';
+import { Icon } from '@iconify/react';
 //import { useSockets } from '../context/socket.context';
+//import user from '../lady.png';
 
 
 const SideBar = () => {
@@ -17,6 +18,7 @@ const SideBar = () => {
   return (
     <div style={sidebar}>
       <div>
+       {/* <img src={user} alt="User" /> */}
         <h1 style={{marginTop: "5rem"}}>username</h1>
         
         <h3>Fler rum</h3>
@@ -42,10 +44,9 @@ const SideBar = () => {
         ></AddNewRoom>
       
       <button 
-      className="button" 
-      style={{marginBottom: "1rem"}}
+      style={signOut} 
       onClick={handleOnLogOut}>
-        {/* <Icon icon="bx:log-out" /> */}
+         <Icon icon="bx:log-out" />
       </button>
     </div>
   );
@@ -54,9 +55,10 @@ const btn: CSSProperties = {
   height: '3.5rem',
   width: '3.5rem',
   borderRadius: '100%',
-  marginLeft: '50px',
+  marginLeft: '60px',
   fontSize: '2.5rem',
   color: '#333',
+  marginTop: '2rem',
 };
 
 const sidebar: CSSProperties = {
@@ -66,12 +68,19 @@ const sidebar: CSSProperties = {
   backgroundColor: '#777',
   position: 'absolute',
   bottom: 0,
+  top: "3rem",
   height: '100%',
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
   alignItems: "center"
 };
-
+const signOut: CSSProperties = {
+  border: 'none',
+  borderRadius: "50px",
+  height: "2rem",
+  width: "3.5rem",
+  marginBottom: "8rem",
+}
 
 export default SideBar;
