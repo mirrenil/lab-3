@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function BadGate() {
+ function BadGate() {
 
     return (
         <div className="">
@@ -14,3 +14,4 @@ export default function BadGate() {
         </div>)
 }
 
+export default BadGate;

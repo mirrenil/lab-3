@@ -1,7 +1,7 @@
 import React, { CSSProperties } from 'react'
 import { useSockets } from '../Context/Socket.context';
-import  CreateRoom  from './CreateRoom';
-import  UserInputComponent  from './UserInputComponent';
+import CreateRoom from './CreateRoom';
+import UserInputComponent from './UserInputComponent';
 
 const StartPage = () => {
   const { username, } = useSockets();
@@ -13,7 +13,7 @@ const StartPage = () => {
           <UserInputComponent />
         </div>
       ) : (
-      <CreateRoom/>
+        <CreateRoom />
       )}
       {/* <UserInputComponent /> */}
     </div>

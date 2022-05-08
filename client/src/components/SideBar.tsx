@@ -1,6 +1,7 @@
 import React, { CSSProperties, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import NewRoom from './NewRoom';
-//import { Icon } from '@iconify/react';
+// import { Icon } from '@iconify/react';
 
 //import { useSockets } from '../context/socket.context';
 //import user from '../lady.png';
@@ -49,7 +50,7 @@ const SideBar = () => {
       <button 
       style={signOut} 
       onClick={handleOnLogOut}>
-         <Icon icon="bx:log-out" />
+         {/* <Icon icon="bx:log-out" /> */}
       </button>
     </div>
   );
