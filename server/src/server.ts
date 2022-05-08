@@ -1,35 +1,36 @@
+import express from "express";
+import { createServer } from "http";
 import { Server, Socket } from "socket.io";
-import { ClientToServerEvents, ServerToClientEvents, InterServerEvents, ServerSocketData } from "../types";
+import config from "config";
+
+import { ClientToServerEvents, ServerToClientEvents, InterServerEvents, ServerSocketData } from "../../types";
 import { getRooms } from "./roomStore";
 import registerChatHandler from './chatHandler'
+import socket from "./socket"
 
-const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, ServerSocketData>();
+const port = config.get<number>("port")
+const host = config.get<string>("host")
+const corsOrigin = config.get<string>("corsOrigin")
 
-io.use((socket: Socket, next) => {
-  const nickname: string = socket.handshake.auth.nickname
-  if(!nickname || nickname.length < 3) {
-    return next(new Error("Invalid nickname"))
+const app = express();
+const httpServer = createServer(app)
+
+const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, ServerSocketData>(httpServer, {
+  cors:{
+    origin: corsOrigin,
+    credentials: true,
   }
-  socket.data.nickname = nickname
-  next()
-})
-
-io.on("connection", (socket) => {
-  console.log("a user connected");
-
-  if(socket.data.nickname) {
-    socket.emit("connected", socket.data.nickname)
-
-    // TODO: Kolla om ett nytt rum skapats, om så sker redan en io.emit till alla sockets med alla rum.
-    socket.emit("roomList", getRooms(io))
-  }
-
-  registerChatHandler(io, socket)
-  
 });
 
-io.listen(4000);
 
+
+app.get('/', (_, res) => res.send(`Server is running`));
+
+httpServer.listen(port, host, () => {
+  console.log(`Server is running`);
+  console.log(`http://${host}:${port}`);
+  socket({ io })
+})
 
 
 /*  
