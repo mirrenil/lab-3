@@ -1,5 +1,5 @@
 import React, { CSSProperties, useState } from 'react';
-import AddNewRoom from './AddNewRoom';
+import AddNewRoom from './NewRoom';
 //import { Icon } from '@iconify/react';
 //import { useSockets } from '../context/socket.context';
 
