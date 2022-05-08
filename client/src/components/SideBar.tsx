@@ -1,18 +1,21 @@
 import React, { CSSProperties, useState } from 'react';
 import AddNewRoom from './NewRoom';
 import { Icon } from '@iconify/react';
+import { useNavigate } from 'react-router-dom';
 //import { useSockets } from '../context/socket.context';
 //import user from '../lady.png';
 
 
 const SideBar = () => {
   const [isAddNewRoomOpen, setIsAddNewRoomOpen] = useState(false);
-  //const { setUsername, currentRoom, username } = useSockets();
+  //const { setUsername, currentRoom, username, rooms, setCurrentRoom } = useSockets();
+  const navigate = useNavigate();
 
 
   const handleOnLogOut = () => {
     localStorage.removeItem('user');
     //setUsername(null)
+    navigate('/');
   }
 
   return (
