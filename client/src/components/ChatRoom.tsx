@@ -1,8 +1,10 @@
 import { ChangeEvent, CSSProperties, FormEvent, useState } from "react";
+import { useSockets } from "../Context/Socket.context";
 //import ChatBubble from "./ChatBubble";
 //import { Socket } from "socket.io-client";
 //import SocketProvider, { ISocketContext, Message, User } from "../context/socket.context";
 //import { useSockets } from '../context/socket.context';
+import { useNavigate } from 'react-router-dom'
 
 // interface Room {
 //     name: string;
@@ -11,13 +13,19 @@ import { ChangeEvent, CSSProperties, FormEvent, useState } from "react";
 
 const ChatRoom = () => {
     const [value, setValue] = useState<string>("");
-    //const navigate = useNavigate();
-    //const { sendMessage, updateRooms } = useSockets();
+    const navigate = useNavigate();
+    const { socket, username,  leaveRoom, rooms, currentRoom} = useSockets();
 
 
-    const handleSendMessage = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log(value)
+    const handleSendMessage = (message: string) => {
+        // socket.emit(
+        //   "send message",
+        //   {
+        //     author: User,
+        //     body: string,
+        //   }
+         console.log(value)
+       
         //sendMessage(value);
     }
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -25,19 +33,18 @@ const ChatRoom = () => {
     }
 
     const handleOnLeave = () => {
-    // if (room) {
-    //   io.updateRooms(room.name);
-    //   io.leaveRoom(room.name);
-      console.log("left room")
-      //navigate("/home");
+    leaveRoom()
+    console.log("left room")
+    navigate("/lobby");
     }
 
     return (
         <div style={rootstyle}>
             <div style={chatsDivStyle}>
                 {/* <ChatBubble /> */}
+                <p>{currentRoom}</p>
             </div>
-            <form style={formStyle} onSubmit={handleSendMessage}>
+            <form style={formStyle} >
                 <input value={value} onChange={handleChange} style={inputStyle} type="text" placeholder="Join the conversation..."/>
             </form>
             <button style={buttonStyle} onClick={handleOnLeave}>Leave room</button>
@@ -90,4 +97,5 @@ export const buttonStyle: CSSProperties = {
   fontWeight: "bold",
   marginTop: "1rem"
 };
+
 export default ChatRoom;

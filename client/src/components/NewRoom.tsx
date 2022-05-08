@@ -1,6 +1,7 @@
-import React, { ChangeEvent, CSSProperties, FormEvent, useState } from 'react'
+import React, { ChangeEvent, CSSProperties, FormEvent, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import {  useNavigate } from 'react-router';
+import { useSockets } from "../Context/Socket.context";
 
 type Modal = {
   onClose: () => void;
@@ -9,20 +10,21 @@ type Modal = {
 
 const NewRoom = ({ open, onClose }: Modal) => {
   const [roomName, setRoomName] = useState<string>('');
-  const [newRoom, setNewRoom] = useState({});
+  const { socket,  rooms, username, joinRoom } = useSockets();
+
   const navigate = useNavigate();
- // const { username, socket, joinRoom } = useSockets();
+  const newRoomRef = useRef();
+
 
   if (!open) return null;
 
   //skicka med username och value
-
+ 
   const handleOnSubmit = (e: FormEvent) => {
     e.preventDefault();
     setRoomName(roomName)
-    //joinRoom(room);
     onClose();
-    navigate('/chatroom');
+    navigate('/chat');
     console.log('Room created!');
     return;
   };
@@ -31,8 +33,15 @@ const NewRoom = ({ open, onClose }: Modal) => {
     setRoomName(e.target.value);
   };
 
-  const consoleLog = () => {
-    console.log(newRoom);
+  const handleCreateRoom = () => {
+    //get the room name
+    if (!String(roomName).trim()) return;
+
+    // emit room created event
+    socket.emit("CREATE_ROOM", { roomName, username });
+    
+    console.log(username);
+    // set room name input to empty string
   }
   
 return ReactDOM.createPortal(
@@ -53,7 +62,7 @@ return ReactDOM.createPortal(
               id="roomName"
               required
             />
-            <button style={submitButtonStyle} onClick={consoleLog}>
+            <button style={submitButtonStyle} onClick={handleCreateRoom}>
               Create room
             </button>
           </form>
