@@ -1,34 +1,27 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-import ChatRoom from './components/ChatRoom';
-
-
-//import ChatRoom from './components/ChatRoom';
-import Input from './components/Input';
-import Lobby from './components/Lobby';
-import NewRoom from './components/NewRoom';
-import SideBar from './components/SideBar';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ErrorBoundary from "./Components/ErrorBoundary";
+import APIContextProvider from "./Context/Socket.context";
+import StartPage from "./Components/StartPage";
+import BadGate from "./Components/BadGate"
 import Layout from './layout/Layout';
-
+import Lobby from './components/Lobby';
+import ChatRoom from './components/ChatRoom';
 function App() {
   return (
-    <BrowserRouter>
-    {/* Add socketprovider here */}
+  <BrowserRouter>
+    <ErrorBoundary>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Input />} />
-
+        <Route path="/" element={<StartPage />} />
+        <Route path="*" element={<BadGate />} />
           <Route path="/chatroom" element={<ChatRoom />} />
 
           <Route path="/lobby" element={<Lobby/>} />
-          {/* <Route path="/chat" element={<ChatRoom/>} /> */}
-
-        </Route>
       </Routes>
-       {/* Add socketprovider here */}
-    </BrowserRouter>
-  );
+    </ErrorBoundary>
+</BrowserRouter>
+  )
 }
 
 export default App;
