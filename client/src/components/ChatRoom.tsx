@@ -29,7 +29,6 @@ const ChatRoom = () => {
 
     const handleOnLeave = () => {
     leaveRoom()
-    console.log("left room")
     navigate("/lobby");
     }
 
@@ -42,7 +41,7 @@ const ChatRoom = () => {
             <form style={formStyle} onSubmit={handleSubmit} >
                 <input value={value} onChange={handleChange} style={inputStyle} type="text" placeholder="Join the conversation..."/>
             </form>
-            {/* <button style={buttonStyle} onClick={handleOnLeave}>Leave room</button> */}
+            <button style={buttonStyle} onClick={handleOnLeave}>Leave room</button>
         </div>
     );
 }
