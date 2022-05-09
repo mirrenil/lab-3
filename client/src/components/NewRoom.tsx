@@ -9,8 +9,8 @@ type Modal = {
 }
 
 const NewRoom = ({ open, onClose }: Modal) => {
-  const [roomName, setRoomName] = useState<string>('');
-  const { socket,  rooms, username, joinRoom } = useSockets();
+  const [roomName, setNewRoomName] = useState<string>('');
+  const { socket,  setRoomName, username, } = useSockets();
 
   const navigate = useNavigate();
   const newRoomRef = useRef();
@@ -22,6 +22,7 @@ const NewRoom = ({ open, onClose }: Modal) => {
  
   const handleOnSubmit = (e: FormEvent) => {
     e.preventDefault();
+    setNewRoomName(roomName)
     setRoomName(roomName)
     onClose();
     navigate('/chat');
@@ -30,7 +31,7 @@ const NewRoom = ({ open, onClose }: Modal) => {
   };
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setRoomName(e.target.value);
+    setNewRoomName(e.target.value);
   };
 
   const handleCreateRoom = () => {

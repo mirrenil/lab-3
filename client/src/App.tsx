@@ -8,18 +8,17 @@ import Lobby from './components/Lobby';
 import ChatRoom from './components/ChatRoom';
 function App() {
   return (
-  <BrowserRouter>
+  
     <ErrorBoundary>
       <Routes>
         <Route path="/" element={<Layout />}>
         <Route index element={<StartPage />} />
-        <Route path="*" element={<BadGate />} />
         <Route path="/lobby" element={<Lobby/>} />
         <Route path="/chat" element={<ChatRoom />} />
+        <Route path="*" element={<BadGate />} />
         </Route>
       </Routes>
     </ErrorBoundary>
-</BrowserRouter>
   )
 }
 

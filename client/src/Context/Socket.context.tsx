@@ -1,34 +1,34 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import io, { Socket } from 'socket.io-client';
 import { SOCKET_URL } from '../config/default';
-export interface User {
-  id: string;
-  username: string;
-}
-export interface Message {
-  author: User;
-  body: string;
-}
+// export interface User {
+//   id: string;
+//   username: string;
+// }
+// export interface Message {
+//   author: User;
+//   body: string;
+// }
 
-export interface Room {
-  name: string;
-  // messages: Messages[];
-}
+// export interface Room {
+//   name: string;
+//   // messages: Messages[];
+// }
 export interface ISocketContext {
   socket: Socket;
   username?: string;
   setUsername: Function;
   //users: User[];
-  rooms: Room[];
+  roomName?: string;
+  setRoomName: Function;
+  rooms: object;
   roomId?: string;
   currentRoom: string;
+  messages?: { message: string; time: string; username: string }[];
+  setMessages: Function;
   setCurrentRoom: React.Dispatch<
     React.SetStateAction<string>
   >;
-  joinRoom: (
-  roomName: string
-  ) => void;
-  leaveRoom: () => void;
   isTyping: string;
 }
 
@@ -39,19 +39,21 @@ const socket =
   const SocketContext = createContext<ISocketContext>({
     socket,
     setUsername: () => false,
-    //users: [],
     rooms: [],
     currentRoom: '',
     setCurrentRoom: () => {},
-    joinRoom: () => {},
-    leaveRoom: () => {},
+    setRoomName: () => {},
+    setMessages: () => false,
     isTyping: '',
+    messages:[],
+
   });
 
   const SocketProvider = (props: any) => {
     const [username, setUsername] = useState('');
-    const [rooms, setRooms] = useState<Room[]>([]);
-    const [roomId, setRoomId] = useState({});
+    const [rooms, setRooms] = useState({});
+    const [roomId, setRoomId] = useState("");
+    const [roomName, setRoomName] = useState('');
     const [messages, setMessages]  = useState([]);
     const [isTyping, setIsTyping] = useState<string>('')
     const [currentRoom, setCurrentRoom] = useState<string>('');
@@ -68,36 +70,47 @@ const socket =
     socket.on("ROOMS", (value: any) => {
       setRooms(value)
     })
+
     socket.on("JOINED_ROOM", (value: any) => {
       setRoomId(value)
       setMessages([])
     })
 
-    socket.on('isTyping', (username: string) => {
-      if (username) {
-        setIsTyping(`${username} is typing...`)
-      }
-    })
-
+    // socket.on('isTyping', (username: string) => {
+    //   if (username) {
+    //     setIsTyping(`${username} is typing...`)
+    //   }
+    // })    
     
-      socket.on('left', (room) => {
-        console.log(
-          "left room"
-        );
-      })
+    //   socket.on('left', (room) => {
+    //     console.log(
+    //       "left room"
+    //     );
+    //   })
       
-       const leaveRoom = (roomName: string) => {
-         socket!.emit('leave', currentRoom)
-       };
+    //    const leaveRoom = (roomName: string) => {
+    //      socket!.emit('leave', currentRoom)
+    //    };
 
-       socket.on('message', (message, from) => {
+    //    socket.on('message', (message, from) => {
 
-       })
+    //    })
 
        
     socket.on('connect_error', (err) => {
       console.log('ogiltigt användarnamn');
     });
+
+    useEffect(() => {
+
+      socket.on("chat-message", ({message, username, time}) => {
+        if(!document.hasFocus()){
+          document.title = `new message: ${message}`;
+        }
+        setMessages((messages) => [...messages, { message, username, time}])
+      })
+    }, [socket])
+
     return (
       <SocketContext.Provider
         value={{ 
@@ -106,9 +119,12 @@ const socket =
           setUsername,
           rooms,
           roomId,
+          roomName,
+          messages,
+          setMessages,
+          setRoomName,
           currentRoom,
           setCurrentRoom,
-          leaveRoom,
           isTyping,
         }}
         {...props}
