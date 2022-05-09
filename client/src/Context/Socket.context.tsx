@@ -76,12 +76,13 @@ const socket =
 
     socket.on("JOINED_ROOM", (value: any) => {
       setRoomId(value)
+      setCurrentRoom(value);
       console.log("JOINED_ROOM: " + value)
       navigate('/chat')
       setMessages([])
     })
 
-    
+
 
     },[])
 
@@ -99,15 +100,17 @@ const socket =
     })
 
     
-      socket.on('left', (room) => {
-        console.log(
-          "left room"
-        );
-      })
-      
-       const leaveRoom = (roomName: string) => {
-         socket!.emit('leave', currentRoom)
+       const leaveRoom = () => {
+         console.log('LEAVE ROOM START')
+          console.log(currentRoom);
+          socket.emit('LEAVE_ROOM', currentRoom, (response: string) => {
+          console.log(response)
+          setCurrentRoom('');
+          console.log(currentRoom);
+          console.log('LEAVE ROOM END')
+        });
        };
+
 
        socket.on('message', (message, from) => {
 

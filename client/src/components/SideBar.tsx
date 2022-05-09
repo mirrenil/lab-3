@@ -7,7 +7,7 @@ import { useSockets } from '../Context/Socket.context';
 
 const SideBar = () => {
   const [isAddNewRoomOpen, setIsAddNewRoomOpen] = useState(false);
-  const {  username, rooms, roomId, socket } = useSockets();
+  const {  username, rooms, roomId, socket, currentRoom } = useSockets();
   const navigate = useNavigate();
 
 
@@ -19,15 +19,16 @@ const SideBar = () => {
 
 
   const handleJoinRoom = (key: any) => {
+    console.log('ROOM JOIN START')
    console.log(key);
    socket.emit("JOIN_ROOM", key);
-   
-    // if (key === roomId) {
-    //       
-    // // navigate('/chat');
-    // // console.log('joined room')
-    // }
 
+   if(currentRoom) {
+     socket.emit('LEAVE_ROOM', currentRoom, (response: string) => {
+       console.log(`${response} and joined ${key}`);
+     })
+   }
+    console.log('ROOM JOIN END')
   }
 
   return (
