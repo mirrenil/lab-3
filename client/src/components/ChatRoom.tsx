@@ -1,24 +1,20 @@
-import { ChangeEvent, CSSProperties, FormEvent, useState } from "react";
+import {CSSProperties, useRef, useState } from "react";
 import { useSockets } from "../Context/Socket.context";
-//import ChatBubble from "./ChatBubble";
-//import { Socket } from "socket.io-client";
-//import SocketProvider, { ISocketContext, Message, User } from "../context/socket.context";
-//import { useSockets } from '../context/socket.context';
 import { useNavigate } from 'react-router-dom'
-
-// interface Room {
-//     name: string;
-//     members: User[];
-// }
+import moment from "moment";
 
 const ChatRoom = () => {
-    const [value, setValue] = useState<string>("");
-    const navigate = useNavigate();
-    const { socket, username,  leaveRoom, rooms, currentRoom, sendMessage} = useSockets();
+  const [value, setValue] = useState<string>("");
+  const navigate = useNavigate();
+  const { socket, username,  leaveRoom, messages, setMessages, currentRoom, sendMessage, roomId} = useSockets();
+  const newMessageRef = useRef<HTMLInputElement>(null);
 
 
+   
     const handleChange = (e: any) => {
         setValue(e.target.value)
+        
+        
     }
 
     const handleSubmit = (e: any) => {
@@ -27,21 +23,76 @@ const ChatRoom = () => {
         sendMessage(value);
     }
 
+
+    function  handleSendMessage (e: any) {
+      const message = newMessageRef.current?.value;
+
+      e.preventDefault();
+        // const message = value
+
+        if (!String(message).trim()) {
+          return;
+        }
+        
+        socket.emit("SEND_ROOM_MESSAGE", {roomId, message, username });
+        
+        setMessages([
+          ...messages,{
+            username: "You",
+            message,
+            time: moment().format(`HH:mm`)
+          },
+        ]);
+        if (newMessageRef && newMessageRef.current ) {
+          newMessageRef.current.value = '';
+        }
+        console.log(message);
+        console.log(messages);
+      }
+
+
+
+
     const handleOnLeave = () => {
     leaveRoom()
     console.log("left room")
     navigate("/lobby");
     }
-
+    if (!roomId) {
+      return <div />;
+    }
     return (
         <div style={rootstyle}>
             <div style={chatsDivStyle}>
                 {/* <ChatBubble /> */}
                 <p>{currentRoom}</p>
             </div>
-            <form style={formStyle} onSubmit={handleSubmit} >
-                <input value={value} onChange={handleChange} style={inputStyle} type="text" placeholder="Join the conversation..."/>
-            </form>
+            <div >
+      <div >
+        {messages.map(({ message, username, time }, index) => {
+          return (
+            <div key={index} >
+              <div key={index} >
+                <span >
+                  {username} - {time}
+                </span>
+                <br/>
+                <span >{message}</span>
+              </div>
+            </div>
+          );
+        })}
+        
+      </div>
+      <div >
+        <input
+          placeholder="write a message"
+          onChange={handleChange}
+          ref={newMessageRef}
+        />
+        <button onClick={handleSendMessage}>SEND</button>
+      </div>
+    </div>
             {/* <button style={buttonStyle} onClick={handleOnLeave}>Leave room</button> */}
         </div>
     );
