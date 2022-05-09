@@ -29,7 +29,8 @@ function socket({ io }: { io: Server }) {
     socket.emit('welcome', `welcome new user!`);
     socket.emit("ROOMS", rooms);
 
-    socket.on("CREATE_ROOM", ({roomName}) => {
+    socket.on("CREATE_ROOM", ({roomName}, callback) => {
+      console.log('in create room')
       console.log({ roomName });
       const roomId = nanoid();
       rooms[roomId] = {
@@ -42,6 +43,8 @@ function socket({ io }: { io: Server }) {
       // emit back to the room creator
       socket.emit("ROOMS", rooms)
       socket.emit("JOINED_ROOM", roomId)
+  
+      callback(roomId);
     })
 
     socket.emit('connected', socket.data.username);
@@ -58,6 +61,14 @@ function socket({ io }: { io: Server }) {
       
       socket.emit("JOINED_ROOM", roomId);
     })
+
+    socket.on('LEAVE_ROOM', (room, callback) => {
+      socket.leave(room);
+      console.log(`${socket.data.username} has left room ${room}`)
+      callback(`${socket.data.username} has left room`);
+    })
+
+
   });
 
 
