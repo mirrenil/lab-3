@@ -24,125 +24,120 @@ export interface ISocketContext {
   rooms: Room[];
   roomId?: string;
   currentRoom: string;
-  setCurrentRoom: React.Dispatch<
-    React.SetStateAction<string>
-  >;
-  joinRoom: (
-  roomName: string
-  ) => void;
+  setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
+  joinRoom: (roomName: string) => void;
   leaveRoom: () => void;
   isTyping: string;
-  sendMessage: Function
+  sendMessage: Function;
+  allUsersOnline: []
 }
 
-const socket =
-  io(SOCKET_URL, {
-    autoConnect: false,
-  });
+const socket = io(SOCKET_URL, {
+  autoConnect: false,
+});
 
+const SocketContext = createContext<ISocketContext>({
+  socket,
+  setUsername: () => false,
+  //users: [],
+  rooms: [],
+  currentRoom: '',
+  setCurrentRoom: () => {},
+  joinRoom: () => {},
+  leaveRoom: () => {},
+  isTyping: '',
+  sendMessage: () => '',
+  allUsersOnline: []
+});
 
-  const SocketContext = createContext<ISocketContext>({
-    socket,
-    setUsername: () => false,
-    //users: [],
-    rooms: [],
-    currentRoom: '',
-    setCurrentRoom: () => {},
-    joinRoom: () => {},
-    leaveRoom: () => {},
-    isTyping: '',
-    sendMessage: () => ''
-  });
+const SocketProvider = (props: any) => {
+  const [username, setUsername] = useState('');
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [roomId, setRoomId] = useState({});
+  const [messages, setMessages] = useState([]);
+  const [isTyping, setIsTyping] = useState<string>('');
+  const [currentRoom, setCurrentRoom] = useState<string>('');
+  const [newMessage, setNewMessage] = useState<string>('');
+  const [allUsersOnline, setAllUsersOnline] = useState([]);
+  const navigate = useNavigate();
 
-  const SocketProvider = (props: any) => {
-    const [username, setUsername] = useState('');
-    const [rooms, setRooms] = useState<Room[]>([]);
-    const [roomId, setRoomId] = useState({});
-    const [messages, setMessages]  = useState([]);
-    const [isTyping, setIsTyping] = useState<string>('')
-    const [currentRoom, setCurrentRoom] = useState<string>('');
-    const [newMessage, setNewMessage] = useState<string>("")
-    const navigate = useNavigate();
+  useEffect(() => {
+    window.onfocus = () => {
+      document.title = 'chaT';
+    };
 
+    socket.on('connect_error', (err) => {
+      console.log('ogiltigt användarnamn');
+    });
 
-    useEffect(() => {
-      window.onfocus = () => {
-        document.title = "chaT"
-      } 
-
-      socket.on('connect_error', (err) => {
-        console.log('ogiltigt användarnamn');
-      });
-
-    socket.on("JOINED_ROOM", (value: any) => {
-      setRoomId(value)
+    socket.on('JOINED_ROOM', (value: any) => {
+      setRoomId(value);
       setCurrentRoom(value);
-      console.log("JOINED_ROOM: " + value)
-      navigate('/chat')
-      setMessages([])
+      console.log('JOINED_ROOM: ' + value);
+      navigate('/chat');
+      setMessages([]);
+    });
+
+  }, []);
+
+  useEffect(() => {
+
+    socket.on('allUsersOnline', (users) => {
+      setAllUsersOnline(users);
+      console.log(users);
     })
 
+  }, [allUsersOnline])
 
+  socket.on('ROOMS', (value: any) => {
+    setRooms(value);
+  });
 
-    },[])
-
-
-    socket.on("ROOMS", (value: any) => {
-      setRooms(value)
-    })
-
-
-
-    socket.on('isTyping', (username: string) => {
-      if (username) {
-        setIsTyping(`${username} is typing...`)
-      }
-    })
-
-    
-       const leaveRoom = () => {
-         console.log('LEAVE ROOM START')
-          console.log(currentRoom);
-          socket.emit('LEAVE_ROOM', currentRoom, (response: string) => {
-          console.log(response)
-          setCurrentRoom('');
-          console.log(currentRoom);
-          console.log('LEAVE ROOM END')
-        });
-       };
-
-
-       socket.on('message', (message, from) => {
-
-       })
-
-       
-   
-
-    const sendMessage = (message: string) => {
-      setNewMessage(message);
-      console.log(message);
+  socket.on('isTyping', (username: string) => {
+    if (username) {
+      setIsTyping(`${username} is typing...`);
     }
+  });
 
-
-    return (
-      <SocketContext.Provider
-        value={{ 
-          socket, 
-          username, 
-          setUsername,
-          rooms,
-          roomId,
-          currentRoom,
-          setCurrentRoom,
-          leaveRoom,
-          isTyping,
-          sendMessage
-        }}
-        {...props}
-      />
-    );
+  const leaveRoom = () => {
+    console.log('LEAVE ROOM START');
+    console.log(currentRoom);
+    socket.emit('LEAVE_ROOM', currentRoom, (response: string) => {
+      console.log(response);
+      setCurrentRoom('');
+      console.log(currentRoom);
+      console.log('LEAVE ROOM END');
+      console.log(allUsersOnline)
+    });
   };
-  
-  export const useSockets = () => useContext(SocketContext);
-  export default SocketProvider;
+
+  socket.on('message', (message, from) => {});
+
+  const sendMessage = (message: string) => {
+    setNewMessage(message);
+    console.log(message);
+  };
+
+  return (
+    <SocketContext.Provider
+      value={{
+        socket,
+        username,
+        setUsername,
+        rooms,
+        roomId,
+        currentRoom,
+        setCurrentRoom,
+        leaveRoom,
+        isTyping,
+        sendMessage,
+        allUsersOnline,
+
+      }}
+      {...props}
+    />
+  );
+};
+
+export const useSockets = () => useContext(SocketContext);
+export default SocketProvider;
