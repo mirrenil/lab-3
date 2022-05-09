@@ -17,18 +17,6 @@ const ChatRoom = () => {
     const { socket, username,  leaveRoom, rooms, currentRoom, sendMessage} = useSockets();
 
 
-    // const handleSendMessage = (message: string) => {
-    //     // socket.emit(
-    //     //   "send message",
-    //     //   {
-    //     //     author: User,
-    //     //     body: string,
-    //     //   }
-    //      console.log(value)
-       
-    //     //sendMessage(value);
-    // }
-
     const handleChange = (e: any) => {
         setValue(e.target.value)
     }
