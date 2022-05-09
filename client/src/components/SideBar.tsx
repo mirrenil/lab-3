@@ -20,7 +20,9 @@ const SideBar = () => {
 
   const handleJoinRoom = (key: any) => {
    console.log(key);
+   if (key === roomId) return;
    socket.emit("JOIN_ROOM", key);
+   navigate('/chat');
    
     // if (key === roomId) {
     //       
