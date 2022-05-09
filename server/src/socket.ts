@@ -45,13 +45,14 @@ function socket({ io }: { io: Server }) {
       socket.emit("JOINED_ROOM", roomId)
     })
 
-    socket.on(
-     "chat-message",({ roomId, message, username }) => {
-        socket.to(roomId).emit("chat-message", {
-          message,
-          username,
-          time: moment().format(`HH:mm`),
-        });
+    socket.on("SEND_ROOM_MESSAGE",({roomId, message, username}) => {
+      socket.to(roomId).emit("ROOM_MESSAGE", {
+        message,
+        username,
+        time:  moment().format(`HH:mm`),
+      })
+       console.log(message, roomId, username);
+       
       });
 
 

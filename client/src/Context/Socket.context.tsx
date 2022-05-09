@@ -21,6 +21,8 @@ export interface ISocketContext {
   username?: string;
   setUsername: Function;
   //users: User[];
+  messages:  { message: string; time: string; username: string }[];
+  setMessages: Function;
   rooms: Room[];
   roomId?: string;
   currentRoom: string;
@@ -44,6 +46,7 @@ const socket =
   const SocketContext = createContext<ISocketContext>({
     socket,
     setUsername: () => false,
+    setMessages: () => false,
     //users: [],
     rooms: [],
     currentRoom: '',
@@ -51,14 +54,15 @@ const socket =
     joinRoom: () => {},
     leaveRoom: () => {},
     isTyping: '',
-    sendMessage: () => ''
+    sendMessage: () => '',
+    messages:[],
   });
 
   const SocketProvider = (props: any) => {
     const [username, setUsername] = useState('');
     const [rooms, setRooms] = useState<Room[]>([]);
     const [roomId, setRoomId] = useState({});
-    const [messages, setMessages]  = useState([]);
+    const [messages, setMessages]  = useState([]as {message: string, username: string, time:string}[]);
     const [isTyping, setIsTyping] = useState<string>('')
     const [currentRoom, setCurrentRoom] = useState<string>('');
     const [newMessage, setNewMessage] = useState<string>("")
@@ -66,9 +70,10 @@ const socket =
 
 
     useEffect(() => {
-      window.onfocus = () => {
-        document.title = "chaT"
-      } 
+      window.onfocus = function () {
+        document.title = "Chat app";
+      };
+    }, []);
 
       socket.on('connect_error', (err) => {
         console.log('ogiltigt användarnamn');
@@ -77,13 +82,10 @@ const socket =
     socket.on("JOINED_ROOM", (value: any) => {
       setRoomId(value)
       console.log("JOINED_ROOM: " + value)
-      navigate('/chat')
+      // navigate('/chat')
       setMessages([])
     })
 
-    
-
-    },[])
 
 
     socket.on("ROOMS", (value: any) => {
@@ -116,11 +118,18 @@ const socket =
        
    
 
-    const sendMessage = (message: string) => {
-      setNewMessage(message);
-      console.log(message);
-    }
-
+    // const sendMessage = (message: string) => {
+    //   setNewMessage(message);
+    //   console.log(message);
+    // }
+    useEffect(() => {
+    socket.on('ROOM_MESSAGE', ({message, username, time}) => {
+      if(!document.hasFocus()){
+        document.title = `new message: ${message}`;
+      }
+      setMessages((messages) => [...messages, { message, username, time }]);
+    })
+}, [socket])
 
     return (
       <SocketContext.Provider
@@ -134,7 +143,8 @@ const socket =
           setCurrentRoom,
           leaveRoom,
           isTyping,
-          sendMessage
+          messages, 
+          setMessages
         }}
         {...props}
       />
