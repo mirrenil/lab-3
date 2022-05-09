@@ -1,11 +1,11 @@
 export interface ServerToClientEvents {
-  message: (message: string, from: {id: string, nickname: string}) => void;
-  connected: (nickname: string) => void;
+  message: (message: string, from: {id: string, username: string}) => void;
+  connected: (username: string) => void;
   roomList: (rooms: string[]) => void;
   joined: (room: string) => void;
   left: (room: string) => void;
   _error: (errorMessage: string) => void;
-  isTyping: (nickname: string) => void;
+  isTyping: (username: string) => void;
 }
 
 export interface ClientToServerEvents {
@@ -20,5 +20,5 @@ export interface InterServerEvents {
 }
 
 export interface ServerSocketData {
-  nickname: string;
+  username: string;
 }

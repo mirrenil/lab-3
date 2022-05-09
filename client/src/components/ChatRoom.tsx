@@ -14,22 +14,29 @@ import { useNavigate } from 'react-router-dom'
 const ChatRoom = () => {
     const [value, setValue] = useState<string>("");
     const navigate = useNavigate();
-    const { socket, username,  leaveRoom, rooms, currentRoom} = useSockets();
+    const { socket, username,  leaveRoom, rooms, currentRoom, sendMessage} = useSockets();
 
 
-    const handleSendMessage = (message: string) => {
-        // socket.emit(
-        //   "send message",
-        //   {
-        //     author: User,
-        //     body: string,
-        //   }
-         console.log(value)
+    // const handleSendMessage = (message: string) => {
+    //     // socket.emit(
+    //     //   "send message",
+    //     //   {
+    //     //     author: User,
+    //     //     body: string,
+    //     //   }
+    //      console.log(value)
        
-        //sendMessage(value);
+    //     //sendMessage(value);
+    // }
+
+    const handleChange = (e: any) => {
+        setValue(e.target.value)
     }
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setValue(value)
+
+    const handleSubmit = (e: any) => {
+        e.preventDefault();
+        console.log('socketid: ', socket.id)
+        sendMessage(value);
     }
 
     const handleOnLeave = () => {
@@ -44,10 +51,10 @@ const ChatRoom = () => {
                 {/* <ChatBubble /> */}
                 <p>{currentRoom}</p>
             </div>
-            <form style={formStyle} >
+            <form style={formStyle} onSubmit={handleSubmit} >
                 <input value={value} onChange={handleChange} style={inputStyle} type="text" placeholder="Join the conversation..."/>
             </form>
-            <button style={buttonStyle} onClick={handleOnLeave}>Leave room</button>
+            {/* <button style={buttonStyle} onClick={handleOnLeave}>Leave room</button> */}
         </div>
     );
 }

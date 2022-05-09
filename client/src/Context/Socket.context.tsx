@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client';
 import { SOCKET_URL } from '../config/default';
+
 export interface User {
   id: string;
   username: string;
@@ -30,10 +32,13 @@ export interface ISocketContext {
   ) => void;
   leaveRoom: () => void;
   isTyping: string;
+  sendMessage: Function
 }
 
 const socket =
-  io(SOCKET_URL);
+  io(SOCKET_URL, {
+    autoConnect: false,
+  });
 
 
   const SocketContext = createContext<ISocketContext>({
@@ -46,6 +51,7 @@ const socket =
     joinRoom: () => {},
     leaveRoom: () => {},
     isTyping: '',
+    sendMessage: () => ''
   });
 
   const SocketProvider = (props: any) => {
@@ -55,23 +61,34 @@ const socket =
     const [messages, setMessages]  = useState([]);
     const [isTyping, setIsTyping] = useState<string>('')
     const [currentRoom, setCurrentRoom] = useState<string>('');
-    // const navigate = useNavigate();
+    const [newMessage, setNewMessage] = useState<string>("")
+    const navigate = useNavigate();
 
 
     useEffect(() => {
       window.onfocus = () => {
         document.title = "chaT"
       } 
+
+      socket.on('connect_error', (err) => {
+        console.log('ogiltigt användarnamn');
+      });
+
+    socket.on("JOINED_ROOM", (value: any) => {
+      setRoomId(value)
+      console.log("JOINED_ROOM: " + value)
+      navigate('/chat')
+      setMessages([])
+    })
+
     },[])
 
 
     socket.on("ROOMS", (value: any) => {
       setRooms(value)
     })
-    socket.on("JOINED_ROOM", (value: any) => {
-      setRoomId(value)
-      setMessages([])
-    })
+
+
 
     socket.on('isTyping', (username: string) => {
       if (username) {
@@ -95,9 +112,14 @@ const socket =
        })
 
        
-    socket.on('connect_error', (err) => {
-      console.log('ogiltigt användarnamn');
-    });
+   
+
+    const sendMessage = (message: string) => {
+      setNewMessage(message);
+      console.log(message);
+    }
+
+
     return (
       <SocketContext.Provider
         value={{ 
@@ -110,6 +132,7 @@ const socket =
           setCurrentRoom,
           leaveRoom,
           isTyping,
+          sendMessage
         }}
         {...props}
       />
