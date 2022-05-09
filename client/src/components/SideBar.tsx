@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import NewRoom from './NewRoom';
 // import { Icon } from '@iconify/react';
 import { useSockets } from '../Context/Socket.context';
-import UsersOnline from './UsersOnline';
 //import user from '../lady.png';
 
 const SideBar = () => {
