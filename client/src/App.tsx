@@ -8,7 +8,7 @@ import Lobby from './components/Lobby';
 import ChatRoom from './components/ChatRoom';
 function App() {
   return (
-  <BrowserRouter>
+
     <ErrorBoundary>
       <Routes>
         <Route path="/" element={<Layout />}>
@@ -19,7 +19,6 @@ function App() {
         </Route>
       </Routes>
     </ErrorBoundary>
-</BrowserRouter>
   )
 }
 
