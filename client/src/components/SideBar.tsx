@@ -17,11 +17,17 @@ const SideBar = () => {
     navigate('/');
   }
 
+
   const handleJoinRoom = (key: any) => {
-    if (key === roomId) return;
-    socket.emit("JOIN_ROOM", key);
-    // navigate('/chat');
-    // console.log('joined room')
+   console.log(key);
+   socket.emit("JOIN_ROOM", key);
+   
+    // if (key === roomId) {
+    //       
+    // // navigate('/chat');
+    // // console.log('joined room')
+    // }
+
   }
 
   return (

@@ -8,7 +8,6 @@ import Lobby from './components/Lobby';
 import ChatRoom from './components/ChatRoom';
 function App() {
   return (
-  
     <ErrorBoundary>
       <Routes>
         <Route path="/" element={<Layout />}>

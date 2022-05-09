@@ -8,14 +8,19 @@ const rooms: Record<string, {name: string}> = {};
 
 
 function socket({ io }: { io: Server }) {
-  console.log('Socket connected');
+  console.log('in function socket');
+  
   
   io.use((socket: Socket, next) => {
+    console.log('in io.use')
     const username: string = socket.handshake.auth.username;
+    console.log(username);
     if (!username) {
       return next(new Error('invalid username'));
     }
+
     socket.data.username = username;
+    console.log("socket.data.username: " + socket.data.username)
     next();
   });
 
@@ -58,8 +63,9 @@ function socket({ io }: { io: Server }) {
     // });
 
     socket.on("JOIN_ROOM", (roomId) => {
+      console.log(roomId);
+      console.log(socket.data.username)
       socket.join(roomId);
-      console.log({roomId});
       
       socket.emit("JOINED_ROOM", roomId);
     })

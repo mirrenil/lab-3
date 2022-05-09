@@ -19,10 +19,10 @@ const UserInputComponent = () => {
   };
 
   const handleOnSubmit = () => {
-
       setUsername(value);
       socket.auth = { username: value };
       socket.connect();
+      // manager.open(); 
     
      
   };
