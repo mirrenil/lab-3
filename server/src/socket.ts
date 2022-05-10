@@ -1,13 +1,14 @@
-import { Server, Socket } from 'socket.io';
+import { Socket } from 'socket.io';
 import { nanoid } from "nanoid";
 import moment from 'moment';
+import type { IOServer } from './server';
 
 
 
 
 const rooms: Record<string, { name: string }> = {};
 
-function socket({ io }: { io: Server }) {
+function socket({ io }: { io: IOServer }) {
   console.log('in function socket');
 
   io.use((socket: Socket, next) => {

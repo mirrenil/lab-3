@@ -2,9 +2,10 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client';
 import { SOCKET_URL } from '../config/default';
+// import { User } from '../../types'
 
 export interface User {
-  id: string;
+  userId: string;
   username: string;
 }
 export interface Message {
@@ -81,32 +82,36 @@ const SocketProvider = (props: any) => {
       setRoomId(value);
       setCurrentRoom(value);
       console.log('JOINED_ROOM: ' + value);
-      navigate('/chat')
+      navigate('/chat');
       setMessages([]);
     });
   }, []);
 
   useEffect(() => {
-    socket.on('allUsersOnline', (users) => {
+    const listener = (users: any) => {
       setAllUsersOnline(users);
       console.log(users);
-    });
+    };
+    socket.on('allUsersOnline', listener);
+    return () => {
+      socket.off('allUsersOnline', listener);
+    };
   }, [allUsersOnline]);
 
   useEffect(() => {
+    console.log('ADD MESSAE SUBSCRIBER');
     socket.on('ROOM_MESSAGE', ({ message, username, time }) => {
       if (!document.hasFocus()) {
         document.title = `new message: ${message}`;
       }
+      console.log(message);
       setMessages((messages) => [...messages, { message, username, time }]);
     });
-  }, [socket]);
-
+  }, []);
 
   socket.on('ROOMS', (value: any) => {
     setRooms(value);
   });
-
 
   socket.on('isTyping', (username: string) => {
     if (username) {
