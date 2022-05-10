@@ -9,8 +9,6 @@ import {
   InterServerEvents,
   ServerSocketData,
 } from "../../types";
-import { getRooms } from "./roomStore";
-import registerChatHandler from "./chatHandler";
 import socket from "./socket";
 
 const port = config.get<number>("port");
