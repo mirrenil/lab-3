@@ -16,6 +16,8 @@ export interface ServerToClientEvents {
   _error: (errorMessage: string) => void;
   isTyping: (username: string) => void;
   allUsersOnline: (users: User[]) => void;
+  usersInRoom: (response: string) => void;
+  
 }
 
 export interface ClientToServerEvents {
@@ -23,6 +25,7 @@ export interface ClientToServerEvents {
   join: (room: string) => void;
   leave: (rooms: string) => void;
   typing: () => void;
+  usersInRoom: (response: string) => void;
 }
 
 export interface InterServerEvents {
