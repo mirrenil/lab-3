@@ -2,7 +2,7 @@ import React, { CSSProperties, useReducer, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NewRoom from './NewRoom';
 import { useSockets } from '../Context/Socket.context';
-import { Icon } from '@iconify/react';
+
 
 const SideBar = () => {
   const [isAddNewRoomOpen, setIsAddNewRoomOpen] = useState(false);
@@ -69,7 +69,7 @@ const SideBar = () => {
       ></NewRoom>
 
       <button style={signOut} onClick={handleOnLogOut}>
-        <Icon icon="bx:log-out" />
+        Sign out
       </button>
     </div>
   );
@@ -97,9 +97,14 @@ const sidebar: CSSProperties = {
 };
 const signOut: CSSProperties = {
   borderRadius: '50px',
-  height: '2.3rem',
-  width: '4.5rem',
+  border: 'none',
+  color: "#fff",
+  fontWeight: "bold",
+  height: '3rem',
+  width: '5rem',
+  fontSize: "1rem",
   marginBottom: '8rem',
+  backgroundColor: 'transparent',
 };
 
 export default SideBar;
