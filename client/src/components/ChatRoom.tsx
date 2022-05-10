@@ -94,10 +94,11 @@ const ChatRoom = () => {
               placeholder="Join the conversation..."
               ref={newMessageRef}
             />
+            <button onClick={handleSendMessage}>SEND</button> 
           </form>
-          <button style={buttonStyle} onClick={handleOnLeave}>
+          {/* <button style={buttonStyle} onClick={handleOnLeave}>
             Leave room
-          </button>
+          </button> */}
           {/* <input
           placeholder="write a message"
           onChange={handleChange}

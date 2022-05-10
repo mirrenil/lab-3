@@ -16,12 +16,13 @@ export interface Room {
   name: string;
   // messages: Messages[];
 }
+
 export interface ISocketContext {
   socket: Socket;
   username?: string;
   setUsername: Function;
   //users: User[];
-  messages:  { message: string; time: string; username: string }[];
+  messages: { message: string; time: string; username: string }[];
   setMessages: Function;
   rooms: Room[];
   roomId?: string;
@@ -31,112 +32,80 @@ export interface ISocketContext {
   leaveRoom: () => void;
   isTyping: string;
   sendMessage: Function;
-  allUsersOnline: []
+  allUsersOnline: [];
 }
 
-const socket =
-  io(SOCKET_URL, {
-    autoConnect: false,
-  });
+const socket = io(SOCKET_URL, {
+  autoConnect: false,
+});
 
+const SocketContext = createContext<ISocketContext>({
+  socket,
+  setUsername: () => false,
+  setMessages: () => false,
+  //users: [],
+  rooms: [],
+  currentRoom: '',
+  setCurrentRoom: () => {},
+  joinRoom: () => {},
+  leaveRoom: () => {},
+  isTyping: '',
+  sendMessage: () => '',
+  messages: [],
+  allUsersOnline: [],
+});
 
-  const SocketContext = createContext<ISocketContext>({
-    socket,
-    setUsername: () => false,
-    setMessages: () => false,
-    //users: [],
-    rooms: [],
-    currentRoom: '',
-    setCurrentRoom: () => {},
-    joinRoom: () => {},
-    leaveRoom: () => {},
-    isTyping: '',
-    sendMessage: () => '',
-    messages:[],
-    allUsersOnline: []
-  });
+const SocketProvider = (props: any) => {
+  const [username, setUsername] = useState('');
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [roomId, setRoomId] = useState({});
+  const [messages, setMessages] = useState(
+    [] as { message: string; username: string; time: string }[]
+  );
+  const [isTyping, setIsTyping] = useState<string>('');
+  const [currentRoom, setCurrentRoom] = useState<string>('');
+  const [newMessage, setNewMessage] = useState<string>('');
+  const [allUsersOnline, setAllUsersOnline] = useState([]);
+  const navigate = useNavigate();
 
-  const SocketProvider = (props: any) => {
-    const [username, setUsername] = useState('');
-    const [rooms, setRooms] = useState<Room[]>([]);
-    const [roomId, setRoomId] = useState({});
-    const [messages, setMessages]  = useState([]as {message: string, username: string, time:string}[]);
-    const [isTyping, setIsTyping] = useState<string>('')
-    const [currentRoom, setCurrentRoom] = useState<string>('');
-    const [newMessage, setNewMessage] = useState<string>("");
-    const [allUsersOnline, setAllUsersOnline] = useState([]);
-    const navigate = useNavigate();
+  useEffect(() => {
+    window.onfocus = function () {
+      document.title = 'Chat app';
+    };
 
+    socket.on('connect_error', (err) => {
+      console.log('ogiltigt användarnamn');
+    });
 
-    useEffect(() => {
-      window.onfocus = function () {
-        document.title = "Chat app";
-      };
-
-      socket.on('connect_error', (err) => {
-        console.log('ogiltigt användarnamn');
-      });
-
-    socket.on("JOINED_ROOM", (value: any) => {
-      setRoomId(value)
+    socket.on('JOINED_ROOM', (value: any) => {
+      setRoomId(value);
       setCurrentRoom(value);
-      console.log("JOINED_ROOM: " + value)
-      // navigate('/chat')
-      setMessages([])
-    })
-    }, []);
+      console.log('JOINED_ROOM: ' + value);
+      navigate('/chat')
+      setMessages([]);
+    });
+  }, []);
 
-    useEffect(() => {
+  useEffect(() => {
+    socket.on('allUsersOnline', (users) => {
+      setAllUsersOnline(users);
+      console.log(users);
+    });
+  }, [allUsersOnline]);
 
-      socket.on('allUsersOnline', (users) => {
-        setAllUsersOnline(users);
-        console.log(users);
-      })
-  
-    }, [allUsersOnline])
-
-    useEffect(() => {
-      socket.on('ROOM_MESSAGE', ({message, username, time}) => {
-        if(!document.hasFocus()){
-          document.title = `new message: ${message}`;
-        }
-        setMessages((messages) => [...messages, { message, username, time }]);
-      })
-    }, [socket])
-
-    //   socket.on('connect_error', (err) => {
-    //     console.log('ogiltigt användarnamn');
-    //   });
-
-    // socket.on("JOINED_ROOM", (value: any) => {
-    //   setRoomId(value)
-    //   setCurrentRoom(value);
-    //   console.log("JOINED_ROOM: " + value)
-    //   // navigate('/chat')
-    //   setMessages([])
-    // })
-
-
-
-    socket.on("ROOMS", (value: any) => {
-      setRooms(value)
-    })
-
-
-
-    socket.on('isTyping', (username: string) => {
-      if (username) {
-        setIsTyping(`${username} is typing...`)
+  useEffect(() => {
+    socket.on('ROOM_MESSAGE', ({ message, username, time }) => {
+      if (!document.hasFocus()) {
+        document.title = `new message: ${message}`;
       }
+      setMessages((messages) => [...messages, { message, username, time }]);
+    });
+  }, [socket]);
 
 
-  /**----------------------------------------------------------- */
-
-  /**------------------------------------------------------------------ */
-    // const sendMessage = (message: string) => {
-    //   setNewMessage(message);
-    //   console.log(message);
-    // }
+  socket.on('ROOMS', (value: any) => {
+    setRooms(value);
+  });
 
 
   socket.on('isTyping', (username: string) => {
@@ -156,28 +125,26 @@ const socket =
     });
   };
 
-    return (
-      <SocketContext.Provider
-        value={{ 
-          socket, 
-          username, 
-          setUsername,
-          rooms,
-          roomId,
-          currentRoom,
-          setCurrentRoom,
-          leaveRoom,
-          isTyping,
-          messages, 
-          setMessages,
-          allUsersOnline,
-        }}
-        {...props}
-      />
-    );
-
-
-})}
+  return (
+    <SocketContext.Provider
+      value={{
+        socket,
+        username,
+        setUsername,
+        rooms,
+        roomId,
+        currentRoom,
+        setCurrentRoom,
+        leaveRoom,
+        isTyping,
+        messages,
+        setMessages,
+        allUsersOnline,
+      }}
+      {...props}
+    />
+  );
+};
 
 export const useSockets = () => useContext(SocketContext);
 export default SocketProvider;
