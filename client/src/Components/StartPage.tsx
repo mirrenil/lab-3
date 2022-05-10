@@ -1,6 +1,5 @@
 import React, { CSSProperties } from 'react'
 import { useSockets } from '../Context/Socket.context';
-import CreateRoom from './CreateRoom';
 import UserInputComponent from './UserInputComponent';
 
 const StartPage = () => {
@@ -13,7 +12,7 @@ const StartPage = () => {
           <UserInputComponent />
         </div>
       ) : (
-        <CreateRoom />
+       null
       )}
       {/* <UserInputComponent /> */}
     </div>

@@ -16,11 +16,14 @@ export interface Room {
   name: string;
   // messages: Messages[];
 }
+
 export interface ISocketContext {
   socket: Socket;
   username?: string;
   setUsername: Function;
   //users: User[];
+  messages: { message: string; time: string; username: string }[];
+  setMessages: Function;
   rooms: Room[];
   roomId?: string;
   currentRoom: string;
@@ -29,7 +32,7 @@ export interface ISocketContext {
   leaveRoom: () => void;
   isTyping: string;
   sendMessage: Function;
-  allUsersOnline: []
+  allUsersOnline: [];
 }
 
 const socket = io(SOCKET_URL, {
@@ -39,6 +42,7 @@ const socket = io(SOCKET_URL, {
 const SocketContext = createContext<ISocketContext>({
   socket,
   setUsername: () => false,
+  setMessages: () => false,
   //users: [],
   rooms: [],
   currentRoom: '',
@@ -47,14 +51,17 @@ const SocketContext = createContext<ISocketContext>({
   leaveRoom: () => {},
   isTyping: '',
   sendMessage: () => '',
-  allUsersOnline: []
+  messages: [],
+  allUsersOnline: [],
 });
 
 const SocketProvider = (props: any) => {
   const [username, setUsername] = useState('');
   const [rooms, setRooms] = useState<Room[]>([]);
   const [roomId, setRoomId] = useState({});
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(
+    [] as { message: string; username: string; time: string }[]
+  );
   const [isTyping, setIsTyping] = useState<string>('');
   const [currentRoom, setCurrentRoom] = useState<string>('');
   const [newMessage, setNewMessage] = useState<string>('');
@@ -62,8 +69,8 @@ const SocketProvider = (props: any) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    window.onfocus = () => {
-      document.title = 'chaT';
+    window.onfocus = function () {
+      document.title = 'Chat app';
     };
 
     socket.on('connect_error', (err) => {
@@ -74,24 +81,32 @@ const SocketProvider = (props: any) => {
       setRoomId(value);
       setCurrentRoom(value);
       console.log('JOINED_ROOM: ' + value);
-      navigate('/chat');
+      navigate('/chat')
       setMessages([]);
     });
-
   }, []);
 
   useEffect(() => {
-
     socket.on('allUsersOnline', (users) => {
       setAllUsersOnline(users);
       console.log(users);
-    })
+    });
+  }, [allUsersOnline]);
 
-  }, [allUsersOnline])
+  useEffect(() => {
+    socket.on('ROOM_MESSAGE', ({ message, username, time }) => {
+      if (!document.hasFocus()) {
+        document.title = `new message: ${message}`;
+      }
+      setMessages((messages) => [...messages, { message, username, time }]);
+    });
+  }, [socket]);
+
 
   socket.on('ROOMS', (value: any) => {
     setRooms(value);
   });
+
 
   socket.on('isTyping', (username: string) => {
     if (username) {
@@ -107,15 +122,7 @@ const SocketProvider = (props: any) => {
       setCurrentRoom('');
       console.log(currentRoom);
       console.log('LEAVE ROOM END');
-      console.log(allUsersOnline)
     });
-  };
-
-  socket.on('message', (message, from) => {});
-
-  const sendMessage = (message: string) => {
-    setNewMessage(message);
-    console.log(message);
   };
 
   return (
@@ -130,9 +137,9 @@ const SocketProvider = (props: any) => {
         setCurrentRoom,
         leaveRoom,
         isTyping,
-        sendMessage,
+        messages,
+        setMessages,
         allUsersOnline,
-
       }}
       {...props}
     />

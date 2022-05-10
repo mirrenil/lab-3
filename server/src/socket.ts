@@ -1,5 +1,9 @@
 import { Server, Socket } from 'socket.io';
-import { nanoid } from 'nanoid';
+import { nanoid } from "nanoid";
+import moment from 'moment';
+
+
+
 
 const rooms: Record<string, { name: string }> = {};
 
@@ -53,6 +57,17 @@ function socket({ io }: { io: Server }) {
       callback(roomId);
     });
 
+    socket.on("SEND_ROOM_MESSAGE",({roomId, message, username}) => {
+      socket.to(roomId).emit("ROOM_MESSAGE", {
+        message,
+        username,
+        time:  moment().format(`HH:mm`),
+      })
+       console.log(message, roomId, username);
+       
+    });
+
+
     socket.emit('connected', socket.data.username);
 
     // socket.on('chat-message', (message) => {
@@ -64,9 +79,13 @@ function socket({ io }: { io: Server }) {
       console.log(roomId);
       console.log(socket.data.username);
       socket.join(roomId);
+      
+      socket.emit("JOINED_ROOM", roomId);
+    })
 
-      socket.emit('JOINED_ROOM', roomId);
-    });
+    socket.on('disconnect', () => {
+      console.log('user disconnected');
+    })
 
     socket.on('LEAVE_ROOM', (room, callback) => {
       socket.leave(room);
@@ -75,5 +94,7 @@ function socket({ io }: { io: Server }) {
     });
   });
 }
+
+
 
 export default socket;

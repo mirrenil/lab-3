@@ -1,4 +1,4 @@
-import React, { ChangeEvent, CSSProperties, FormEvent, useRef, useState } from 'react'
+import { ChangeEvent, CSSProperties, FormEvent, useState } from 'react'
 import ReactDOM from 'react-dom'
 import {  useNavigate } from 'react-router';
 import { useSockets } from "../Context/Socket.context";
@@ -9,11 +9,10 @@ type Modal = {
 }
 
 const NewRoom = ({ open, onClose }: Modal) => {
-  const [roomName, setRoomName] = useState<string>('');
-  const { socket,  rooms, username, joinRoom } = useSockets();
+  const [roomName, setNewRoomName] = useState<string>('');
+  const { socket, username } = useSockets();
 
   const navigate = useNavigate();
-  const newRoomRef = useRef();
 
 
   if (!open) return null;
@@ -22,7 +21,7 @@ const NewRoom = ({ open, onClose }: Modal) => {
  
   const handleOnSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setRoomName(roomName)
+    setNewRoomName(roomName)
     onClose();
     navigate('/chat');
     console.log('Room created!');
@@ -30,7 +29,7 @@ const NewRoom = ({ open, onClose }: Modal) => {
   };
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setRoomName(e.target.value);
+    setNewRoomName(e.target.value);
   };
 
   const handleCreateRoom = () => {
