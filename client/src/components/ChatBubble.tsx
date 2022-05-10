@@ -33,8 +33,8 @@ const ChatBubble = (props: Props) => {
 
   return (
     <>
-      <span style={usernameStyle}>{username}</span>
-      <div style={!test ? rootStyle : myMessageStyle}>
+      {/* <span style={usernameStyle}>{username}</span> */}
+      <div style={rootStyle}>
             <div style={textStyle}>
             <div>
                   <span>
