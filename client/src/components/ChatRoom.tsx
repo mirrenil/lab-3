@@ -1,7 +1,8 @@
 import { CSSProperties, useRef, useState } from 'react';
 import { useSockets } from '../Context/Socket.context';
 import { useNavigate } from 'react-router-dom';
-//import ChatBubble from "./ChatBubble";        
+//import ChatBubble from "./ChatBubble";  
+import { Icon } from '@iconify/react';      
 import moment from 'moment';
 
 const ChatRoom = () => {
@@ -67,11 +68,13 @@ const ChatRoom = () => {
 
   return (
     <div style={rootstyle}>
+       <button style={buttonStyle} onClick={handleOnLeave}>
+           <Icon icon="bx:log-out" />
+          </button>
       <p>{currentRoom} name of room here</p>
       <div style={chatsDivStyle}>
         {/* <ChatBubble /> */}
-        <p>{currentRoom}</p>
-      </div>
+        {/* <p>{currentRoom}</p> */}
         <div>
           {messages.map(({ message, username, time }, index) => {
             return (
@@ -87,6 +90,8 @@ const ChatRoom = () => {
             );
           })}
         </div>
+      </div>
+        
         <div>
           <form style={formStyle} onSubmit={handleSendMessage}>
             <input
@@ -98,9 +103,6 @@ const ChatRoom = () => {
               ref={newMessageRef}
             />
           </form>
-           <button style={buttonStyle} onClick={handleOnLeave}>
-            Leave room
-          </button>
       </div>
     </div>
   );
@@ -124,6 +126,7 @@ const inputStyle: CSSProperties = {
     height: '2.5rem',
     background: "rgba(255, 255, 255, 0.3)",
     paddingLeft: "5%",
+    marginBottom: "20px",
 }
 
 const chatsDivStyle: CSSProperties = {
@@ -143,21 +146,19 @@ const formStyle: CSSProperties = {
 
 export const buttonStyle: CSSProperties = {
   padding: "0.5em 1.5em",
-  margin: "0 0.3em 0.3em 0",
   borderRadius: "2em",
   color: "#FFFFFF",
-  backgroundColor: "#4eb5f1",
+  backgroundColor: "transparent",
   textAlign: "center",
   transition: "all 0.2s",
-  fontSize: "1rem",
+  fontSize: "2rem",
   border: "none",
   cursor: "pointer",
   fontWeight: "bold",
-  marginTop: "2.5rem",
-  marginBottom: ".1rem",
-  position: "relative",
-  left: "30%",
-
+  marginTop: "1.5rem",
+  position: "fixed",
+  left: "250px",
+  top: "140px",
 };
 
 export default ChatRoom;
