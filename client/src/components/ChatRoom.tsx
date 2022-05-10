@@ -5,6 +5,7 @@ import { useSockets } from "../Context/Socket.context";
 //import SocketProvider, { ISocketContext, Message, User } from "../context/socket.context";
 //import { useSockets } from '../context/socket.context';
 import { useNavigate } from 'react-router-dom'
+import ChatBubble from "./ChatBubble";
 
 // interface Room {
 //     name: string;
@@ -14,7 +15,7 @@ import { useNavigate } from 'react-router-dom'
 const ChatRoom = () => {
     const [value, setValue] = useState<string>("");
     const navigate = useNavigate();
-    const { socket, username,  leaveRoom, rooms, currentRoom, sendMessage} = useSockets();
+    const { socket, username,  leaveRoom, rooms, currentRoom, sendMessage } = useSockets();
 
 
     const handleChange = (e: any) => {
@@ -34,9 +35,9 @@ const ChatRoom = () => {
 
     return (
         <div style={rootstyle}>
+            <p>{currentRoom} name of room</p>
             <div style={chatsDivStyle}>
-                {/* <ChatBubble /> */}
-                <p>{currentRoom}</p>
+                <ChatBubble />
             </div>
             <form style={formStyle} onSubmit={handleSubmit} >
                 <input value={value} onChange={handleChange} style={inputStyle} type="text" placeholder="Join the conversation..."/>
@@ -47,28 +48,32 @@ const ChatRoom = () => {
 }
 
 const rootstyle: CSSProperties = {
-    border: "2px solid red",
-    height: "60vh",
-    width: "70%",
-    marginLeft: "20%", //Samma som sidebarens width
+    backgroundColor: "#999",
+    borderRadius: "10px",
+    height: "75vh",
+    width: "550px",
+    marginLeft: "30%", //Samma som sidebarens width
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
 }
 
 const inputStyle: CSSProperties = {
-    width: "60%",
+    width: "50%",
     borderRadius: "50px",
     border: 'none',
     height: '2.5rem',
-    background: "rgba(255, 255, 255, 0.3)"
+    background: "rgba(255, 255, 255, 0.3)",
+    paddingLeft: "5%",
 }
 
 const chatsDivStyle: CSSProperties = {
-    border: '2px solid blue',
+    border: '2px solid #666',
+    borderRadius: '10px',
     height: "85%",
     width: "60%",
-    marginBottom: "2rem"
+    marginBottom: "2rem",
+    marginTop: "1rem"
 }
 
 const formStyle: CSSProperties = {
@@ -89,7 +94,8 @@ export const buttonStyle: CSSProperties = {
   border: "none",
   cursor: "pointer",
   fontWeight: "bold",
-  marginTop: "1rem"
+  marginTop: "1rem",
+  marginBottom: "1rem"
 };
 
 export default ChatRoom;

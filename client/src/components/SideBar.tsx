@@ -1,9 +1,8 @@
 import React, { CSSProperties, useReducer, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NewRoom from './NewRoom';
-// import { Icon } from '@iconify/react';
 import { useSockets } from '../Context/Socket.context';
-//import user from '../lady.png';
+import { Icon } from '@iconify/react';
 
 const SideBar = () => {
   const [isAddNewRoomOpen, setIsAddNewRoomOpen] = useState(false);
@@ -34,7 +33,7 @@ const SideBar = () => {
     <div style={sidebar}>
       <div>
         {/* <img src={user} alt="User" /> */}
-        <h1 style={{ marginTop: '5rem' }}>{username}</h1>
+        <h1 style={{ marginTop: '9rem' }}>{username}</h1>
         <h5>Open rooms</h5>
         <ul>
           {Object.keys(rooms).map((key: any) => {
@@ -70,7 +69,7 @@ const SideBar = () => {
       ></NewRoom>
 
       <button style={signOut} onClick={handleOnLogOut}>
-        {/* <Icon icon="bx:log-out" /> */}
+        <Icon icon="bx:log-out" />
       </button>
     </div>
   );
@@ -79,20 +78,17 @@ const btn: CSSProperties = {
   height: '3.5rem',
   width: '3.5rem',
   borderRadius: '100%',
-  marginLeft: '60px',
   fontSize: '2.5rem',
   color: '#333',
-  marginTop: '2rem',
+  marginTop: '3rem',
 };
 
 const sidebar: CSSProperties = {
-  margin: '0',
   padding: '20px',
   width: '180px', //om ändras måste även margin left i ChatRoom ändras
   backgroundColor: '#888',
   position: 'absolute',
   bottom: 0,
-  top: '3rem',
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
@@ -100,10 +96,9 @@ const sidebar: CSSProperties = {
   alignItems: 'center',
 };
 const signOut: CSSProperties = {
-  border: 'none',
   borderRadius: '50px',
-  height: '2rem',
-  width: '3.5rem',
+  height: '2.3rem',
+  width: '4.5rem',
   marginBottom: '8rem',
 };
 
