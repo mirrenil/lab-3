@@ -1,7 +1,8 @@
 import { CSSProperties } from 'react';
 import { useSockets } from '../Context/Socket.context';
 //import {useSockets} from '../context/socket.context'
-
+import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 // interface Message {
 // userName: string;
 // message: string;
@@ -10,13 +11,36 @@ import { useSockets } from '../Context/Socket.context';
 // interface chatBubble {
 //   message: Message; 
 // }
+
+
 const ChatBubble = () => {
-    const { username, socket, sendMessage } = useSockets();
+  const navigate = useNavigate();
+  const {
+    socket,
+    username,
+    messages,
+    roomId,
+  } = useSockets();
+   // const { username, socket, sendMessage } = useSockets();
   return (
     <>
       <span style={usernameStyle}>{username}</span>
       <div style={rootStyle}>
-          <p style={textStyle}>Lorem ipsum dolor sit amet</p>
+            <div style={textStyle}>
+          {messages.map(({ message, username, time }, index) => {
+            return (
+              <div key={index}>
+                <div key={index}>
+                  <span>
+                    {username} - {time}
+                  </span>
+                  <br />
+                  <span>{message}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
 
       </div>
     </>

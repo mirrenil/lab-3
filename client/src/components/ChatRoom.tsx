@@ -1,9 +1,10 @@
 import { CSSProperties, useRef, useState } from 'react';
 import { useSockets } from '../Context/Socket.context';
 import { useNavigate } from 'react-router-dom';
-//import ChatBubble from "./ChatBubble";  
+import ChatBubble from "./ChatBubble";  
 import { Icon } from '@iconify/react';      
 import moment from 'moment';
+
 
 const ChatRoom = () => {
   const [value, setValue] = useState<string>('');
@@ -73,9 +74,9 @@ const ChatRoom = () => {
           </button>
       <p>{currentRoom} name of room here</p>
       <div style={chatsDivStyle}>
-        {/* <ChatBubble /> */}
+        <ChatBubble />
         {/* <p>{currentRoom}</p> */}
-        <div>
+        {/* <div>
           {messages.map(({ message, username, time }, index) => {
             return (
               <div key={index}>
@@ -89,7 +90,7 @@ const ChatRoom = () => {
               </div>
             );
           })}
-        </div>
+        </div> */}
       </div>
         
         <div>
