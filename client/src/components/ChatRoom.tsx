@@ -5,6 +5,7 @@ import ChatBubble from "./ChatBubble";
 import { Icon } from '@iconify/react';      
 import moment from 'moment';
 import { time } from 'console';
+import IsTyping from './IsTyping';
 
 
 const ChatRoom = () => {
@@ -74,7 +75,7 @@ const ChatRoom = () => {
        {messages.map(({ message, username, time }, index) => {
           return ( <ChatBubble key={index} message={message} username={username} time={time} /> );
        })}
-
+        <IsTyping />
       </div>
         <div>
           <form style={formStyle} onSubmit={handleSendMessage}>
