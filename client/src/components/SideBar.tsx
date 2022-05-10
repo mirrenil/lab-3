@@ -1,15 +1,29 @@
-import React, { CSSProperties, useReducer, useState } from 'react';
+import React, { CSSProperties, useEffect, useReducer, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NewRoom from './NewRoom';
 import { useSockets } from '../Context/Socket.context';
 import  './Style/SideBar.css';
 import { FaUserAlt } from "react-icons/fa";
 
+import { Icon } from '@iconify/react';
+import userEvent from '@testing-library/user-event';
 
-const SideBar = () => {
+
+interface Props {
+  children?: React.ReactNode;
+}
+
+const SideBar = ({ children }: Props) => {
   const [isAddNewRoomOpen, setIsAddNewRoomOpen] = useState(false);
-  const { username, rooms, roomId, socket, currentRoom, allUsersOnline } =
-    useSockets();
+  const {
+    username,
+    rooms,
+    roomId,
+    socket,
+    currentRoom,
+    allUsersOnline,
+    usersInRoom,
+  } = useSockets();
   const navigate = useNavigate();
 
   const handleOnLogOut = () => {
@@ -30,6 +44,18 @@ const SideBar = () => {
     }
     console.log('ROOM JOIN END');
   };
+
+  function UsersDiv() {
+    return (
+      <div>
+        {!usersInRoom
+          ? null
+          : usersInRoom.map((user: string) => {
+              return <p key={user + user}>{user}</p>;
+            })}
+      </div>
+    );
+  }
 
   return (
     <div className="sideBar-container">
@@ -66,7 +92,14 @@ const SideBar = () => {
           })}
         </div>
 
-        <button  onClick={() => setIsAddNewRoomOpen(true)}>
+
+        <div>
+          <h5>{!currentRoom ? "" : "Users in room:"}</h5>
+          <UsersDiv />
+        </div>
+
+        <button style={btn} onClick={() => setIsAddNewRoomOpen(true)}>
+
           +
         </button>
       </div>

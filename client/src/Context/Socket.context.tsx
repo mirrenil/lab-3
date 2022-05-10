@@ -34,6 +34,7 @@ export interface ISocketContext {
   isTyping: string;
   sendMessage: Function;
   allUsersOnline: [];
+  usersInRoom: [];
 }
 
 const socket = io(SOCKET_URL, {
@@ -54,6 +55,7 @@ const SocketContext = createContext<ISocketContext>({
   sendMessage: () => '',
   messages: [],
   allUsersOnline: [],
+  usersInRoom: []
 });
 
 const SocketProvider = (props: any) => {
@@ -67,6 +69,7 @@ const SocketProvider = (props: any) => {
   const [currentRoom, setCurrentRoom] = useState<string>('');
   const [newMessage, setNewMessage] = useState<string>('');
   const [allUsersOnline, setAllUsersOnline] = useState([]);
+  const [usersInRoom, setUsersInRoom] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -85,6 +88,7 @@ const SocketProvider = (props: any) => {
       navigate('/chat');
       setMessages([]);
     });
+
   }, []);
 
   useEffect(() => {
@@ -107,7 +111,18 @@ const SocketProvider = (props: any) => {
       console.log(message);
       setMessages((messages) => [...messages, { message, username, time }]);
     });
-  }, []);
+
+  }, [socket]);
+
+  useEffect(() => {
+    socket.emit('usersInRoom', currentRoom, (response: any) => {
+      console.log(response);
+      setUsersInRoom(response);
+      return;
+    });
+  }, [currentRoom])
+
+
 
   socket.on('ROOMS', (value: any) => {
     setRooms(value);
@@ -145,6 +160,7 @@ const SocketProvider = (props: any) => {
         messages,
         setMessages,
         allUsersOnline,
+        usersInRoom
       }}
       {...props}
     />
