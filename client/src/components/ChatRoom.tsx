@@ -1,6 +1,7 @@
 import { CSSProperties, useRef, useState } from 'react';
 import { useSockets } from '../Context/Socket.context';
 import { useNavigate } from 'react-router-dom';
+//import ChatBubble from "./ChatBubble";        
 import moment from 'moment';
 
 const ChatRoom = () => {
@@ -16,6 +17,7 @@ const ChatRoom = () => {
     sendMessage,
     roomId,
   } = useSockets();
+  
   const newMessageRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: any) => {
@@ -54,21 +56,22 @@ const ChatRoom = () => {
     console.log(message);
     console.log(messages);
   }
-
-  const handleOnLeave = () => {
+  
+    const handleOnLeave = () => {
     leaveRoom();
     navigate('/lobby');
   };
   if (!roomId) {
     return <div />;
   }
+
   return (
     <div style={rootstyle}>
+      <p>{currentRoom} name of room here</p>
       <div style={chatsDivStyle}>
         {/* <ChatBubble /> */}
         <p>{currentRoom}</p>
       </div>
-      <div>
         <div>
           {messages.map(({ message, username, time }, index) => {
             return (
@@ -85,7 +88,7 @@ const ChatRoom = () => {
           })}
         </div>
         <div>
-          <form style={formStyle} onSubmit={handleSubmit}>
+          <form style={formStyle} onSubmit={handleSendMessage}>
             <input
               value={value}
               onChange={handleChange}
@@ -94,53 +97,44 @@ const ChatRoom = () => {
               placeholder="Join the conversation..."
               ref={newMessageRef}
             />
-            <button onClick={handleSendMessage}>SEND</button> 
           </form>
-          {/* <button style={buttonStyle} onClick={handleOnLeave}>
+           <button style={buttonStyle} onClick={handleOnLeave}>
             Leave room
-          </button> */}
-          {/* <input
-          placeholder="write a message"
-          onChange={handleChange}
-          
-        />
-        <button onClick={handleSendMessage}>SEND</button> */}
-        </div>
+          </button>
       </div>
-      {/* <button style={buttonStyle} onClick={handleOnLeave}>Leave room</button> */}
-      {/* <form style={formStyle} onSubmit={handleSubmit} >
-                <input value={value} onChange={handleChange} style={inputStyle} type="text" placeholder="Join the conversation..." ref={newMessageRef}/>
-            </form>
-            <button style={buttonStyle} onClick={handleOnLeave}>Leave room</button> */}
     </div>
   );
 };
 
 const rootstyle: CSSProperties = {
-  border: '2px solid red',
-  height: '60vh',
-  width: '70%',
-  marginLeft: '20%', //Samma som sidebarens width
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-};
+    backgroundColor: "#999",
+    borderRadius: "10px",
+    height: "75vh",
+    width: "550px",
+    marginLeft: "30%", //Samma som sidebarens width
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
+}
 
 const inputStyle: CSSProperties = {
-  width: '60%',
-  borderRadius: '50px',
-  border: 'none',
-  height: '2.5rem',
-  background: 'rgba(255, 255, 255, 0.3)',
-};
+    width: "50%",
+    borderRadius: "50px",
+    border: 'none',
+    height: '2.5rem',
+    background: "rgba(255, 255, 255, 0.3)",
+    paddingLeft: "5%",
+}
 
 const chatsDivStyle: CSSProperties = {
-  border: '2px solid blue',
-  height: '85%',
-  width: '60%',
-  marginBottom: '2rem',
-};
-
+    border: '2px solid #666',
+    borderRadius: '10px',
+    height: "85%",
+    width: "60%",
+    marginBottom: "2rem",
+    marginTop: "1rem"
+}
+        
 const formStyle: CSSProperties = {
   width: '100%',
   textAlign: 'center',
@@ -148,18 +142,19 @@ const formStyle: CSSProperties = {
 };
 
 export const buttonStyle: CSSProperties = {
-  padding: '0.5em 1.5em',
-  margin: '0 0.3em 0.3em 0',
-  borderRadius: '2em',
-  color: '#FFFFFF',
-  backgroundColor: '#4eb5f1',
-  textAlign: 'center',
-  transition: 'all 0.2s',
-  fontSize: '1rem',
-  border: 'none',
-  cursor: 'pointer',
-  fontWeight: 'bold',
-  marginTop: '1rem',
+  padding: "0.5em 1.5em",
+  margin: "0 0.3em 0.3em 0",
+  borderRadius: "2em",
+  color: "#FFFFFF",
+  backgroundColor: "#4eb5f1",
+  textAlign: "center",
+  transition: "all 0.2s",
+  fontSize: "1rem",
+  border: "none",
+  cursor: "pointer",
+  fontWeight: "bold",
+  marginTop: "1rem",
+  marginBottom: "1rem"
 };
 
 export default ChatRoom;
