@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router'
 import SideBar from '../components/SideBar'
-import Header from '../Header'
+import Header from '../components/Header'
 
 
 function Layout() {

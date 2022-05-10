@@ -4,8 +4,6 @@ import moment from 'moment';
 import type { IOServer } from './server';
 
 
-
-
 const rooms: Record<string, { name: string }> = {};
 
 function socket({ io }: { io: IOServer }) {
@@ -22,6 +20,8 @@ function socket({ io }: { io: IOServer }) {
     socket.data.username = username;
     console.log('socket.data.username: ' + socket.data.username);
     next();
+
+    
   });
 
   io.on('connection', (socket: Socket) => {
@@ -34,6 +34,27 @@ function socket({ io }: { io: IOServer }) {
       })
       socket.emit("allUsersOnline", users);
     }
+
+    socket.on('usersInRoom', (roomName: string, callback) => {
+      console.log('usersinroom:', roomName);
+    
+      const fetchUsers = async () => {
+        let users = [];
+         let roomUsers = await io.in(roomName).fetchSockets();
+         for (let user of roomUsers) {
+           console.log(user.data.username);
+           users.push(user.data.username);
+         }
+          callback(users);
+          return;
+      }
+      fetchUsers();
+      // callback(roomUsers);
+    })
+    // const renderUsersInRoom = async (room: string) => {
+    //   let roomUsers = await io.in(room).fetchSockets();
+    //   console.log(roomUsers);
+    // }
 
     console.log(`User is connected ${socket.id}`);
 

@@ -1,13 +1,29 @@
-import React, { CSSProperties, useReducer, useState } from 'react';
+import React, { CSSProperties, useEffect, useReducer, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NewRoom from './NewRoom';
 import { useSockets } from '../Context/Socket.context';
+import  './Style/SideBar.css';
+import { FaUserAlt } from "react-icons/fa";
+
+import { Icon } from '@iconify/react';
+import userEvent from '@testing-library/user-event';
 
 
-const SideBar = () => {
+interface Props {
+  children?: React.ReactNode;
+}
+
+const SideBar = ({ children }: Props) => {
   const [isAddNewRoomOpen, setIsAddNewRoomOpen] = useState(false);
-  const { username, rooms, roomId, socket, currentRoom, allUsersOnline } =
-    useSockets();
+  const {
+    username,
+    rooms,
+    roomId,
+    socket,
+    currentRoom,
+    allUsersOnline,
+    usersInRoom,
+  } = useSockets();
   const navigate = useNavigate();
 
   const handleOnLogOut = () => {
@@ -29,17 +45,33 @@ const SideBar = () => {
     console.log('ROOM JOIN END');
   };
 
-  return (
-    <div style={sidebar}>
+  function UsersDiv() {
+    return (
       <div>
-        {/* <img src={user} alt="User" /> */}
-        <h1 style={{ marginTop: '9rem' }}>{username}</h1>
-        <h5>Open rooms</h5>
-        <ul>
+        {!usersInRoom
+          ? null
+          : usersInRoom.map((user: string) => {
+              return <p key={user + user}>{user}</p>;
+            })}
+      </div>
+    );
+  }
+
+  return (
+    <div className="sideBar-container">
+      <div>
+        <div className="usernameDiv">
+          <FaUserAlt className="user-icon" />
+          <h1 className='name'>{username}</h1>
+        </div>
+        <div className="available-rooms-container">
+          <h5 className="available-rooms-header">Open rooms</h5>
+          <ul >
           {Object.keys(rooms).map((key: any) => {
             return (
               <div key={key}>
                 <button
+                  className = 'button room-list-button'
                   disabled={key === roomId}
                   onClick={() => handleJoinRoom(key)}
                   title={`Join ${rooms[key].name}`}
@@ -50,6 +82,8 @@ const SideBar = () => {
             );
           })}
         </ul>
+        </div>
+        
 
         <div>
           <h5>Users online:</h5>
@@ -58,7 +92,14 @@ const SideBar = () => {
           })}
         </div>
 
+
+        <div>
+          <h5>{!currentRoom ? "" : "Users in room:"}</h5>
+          <UsersDiv />
+        </div>
+
         <button style={btn} onClick={() => setIsAddNewRoomOpen(true)}>
+
           +
         </button>
       </div>
@@ -68,43 +109,43 @@ const SideBar = () => {
         onClose={() => setIsAddNewRoomOpen(false)}
       ></NewRoom>
 
-      <button style={signOut} onClick={handleOnLogOut}>
+      <button  onClick={handleOnLogOut}>
         Sign out
       </button>
     </div>
   );
 };
-const btn: CSSProperties = {
-  height: '3.5rem',
-  width: '3.5rem',
-  borderRadius: '100%',
-  fontSize: '2.5rem',
-  color: '#333',
-  marginTop: '3rem',
-};
+// const btn: CSSProperties = {
+//   height: '3.5rem',
+//   width: '3.5rem',
+//   borderRadius: '100%',
+//   fontSize: '2.5rem',
+//   color: '#333',
+//   marginTop: '3rem',
+// };
 
-const sidebar: CSSProperties = {
-  padding: '20px',
-  width: '180px', //om ändras måste även margin left i ChatRoom ändras
-  backgroundColor: '#888',
-  position: 'absolute',
-  bottom: 0,
-  height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-};
-const signOut: CSSProperties = {
-  borderRadius: '50px',
-  border: 'none',
-  color: "#fff",
-  fontWeight: "bold",
-  height: '3rem',
-  width: '5rem',
-  fontSize: "1rem",
-  marginBottom: '8rem',
-  backgroundColor: 'transparent',
-};
+// const sidebar: CSSProperties = {
+//   padding: '20px',
+//   width: '180px', //om ändras måste även margin left i ChatRoom ändras
+//   backgroundColor: '#888',
+//   position: 'absolute',
+//   bottom: 0,
+//   height: '100%',
+//   display: 'flex',
+//   flexDirection: 'column',
+//   justifyContent: 'space-between',
+//   alignItems: 'center',
+// };
+// const signOut: CSSProperties = {
+//   borderRadius: '50px',
+//   border: 'none',
+//   color: "#fff",
+//   fontWeight: "bold",
+//   height: '3rem',
+//   width: '5rem',
+//   fontSize: "1rem",
+//   marginBottom: '8rem',
+//   backgroundColor: 'transparent',
+// };
 
 export default SideBar;
