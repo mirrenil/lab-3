@@ -1,51 +1,110 @@
-import { ChangeEvent, CSSProperties, FormEvent, useState } from "react";
-import { useSockets } from "../Context/Socket.context";
-//import ChatBubble from "./ChatBubble";
-//import { Socket } from "socket.io-client";
-//import SocketProvider, { ISocketContext, Message, User } from "../context/socket.context";
-//import { useSockets } from '../context/socket.context';
-import { useNavigate } from 'react-router-dom'
-import ChatBubble from "./ChatBubble";
-
-// interface Room {
-//     name: string;
-//     members: User[];
-// }
+import { CSSProperties, useRef, useState } from 'react';
+import { useSockets } from '../Context/Socket.context';
+import { useNavigate } from 'react-router-dom';
+//import ChatBubble from "./ChatBubble";        
+import moment from 'moment';
 
 const ChatRoom = () => {
-    const [value, setValue] = useState<string>("");
-    const navigate = useNavigate();
-    const { socket, username,  leaveRoom, rooms, currentRoom, sendMessage } = useSockets();
+  const [value, setValue] = useState<string>('');
+  const navigate = useNavigate();
+  const {
+    socket,
+    username,
+    leaveRoom,
+    messages,
+    setMessages,
+    currentRoom,
+    sendMessage,
+    roomId,
+  } = useSockets();
+  
+  const newMessageRef = useRef<HTMLInputElement>(null);
 
+  const handleChange = (e: any) => {
+    setValue(e.target.value);
+  };
 
-    const handleChange = (e: any) => {
-        setValue(e.target.value)
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    console.log('socketid: ', socket.id);
+    //sendMessage(value);
+  };
+
+  function handleSendMessage(e: any) {
+    const message = newMessageRef.current?.value;
+
+    e.preventDefault();
+    // const message = value
+
+    if (!String(message).trim()) {
+      return;
     }
 
-    const handleSubmit = (e: any) => {
-        e.preventDefault();
-        console.log('socketid: ', socket.id)
-        sendMessage(value);
-    }
+    socket.emit('SEND_ROOM_MESSAGE', { roomId, message, username });
 
+    setMessages([
+      ...messages,
+      {
+        username: 'You',
+        message,
+        time: moment().format(`HH:mm`),
+      },
+    ]);
+    if (newMessageRef && newMessageRef.current) {
+      newMessageRef.current.value = '';
+    }
+    console.log(message);
+    console.log(messages);
+  }
+  
     const handleOnLeave = () => {
-    leaveRoom()
-    navigate("/lobby");
-    }
+    leaveRoom();
+    navigate('/lobby');
+  };
+  if (!roomId) {
+    return <div />;
+  }
 
-    return (
-        <div style={rootstyle}>
-            <p>{currentRoom} name of room</p>
-            <div style={chatsDivStyle}>
-                <ChatBubble />
-            </div>
-            <form style={formStyle} onSubmit={handleSubmit} >
-                <input value={value} onChange={handleChange} style={inputStyle} type="text" placeholder="Join the conversation..."/>
-            </form>
-            <button style={buttonStyle} onClick={handleOnLeave}>Leave room</button>
+  return (
+    <div style={rootstyle}>
+      <p>{currentRoom} name of room here</p>
+      <div style={chatsDivStyle}>
+        {/* <ChatBubble /> */}
+        <p>{currentRoom}</p>
+      </div>
+        <div>
+          {messages.map(({ message, username, time }, index) => {
+            return (
+              <div key={index}>
+                <div key={index}>
+                  <span>
+                    {username} - {time}
+                  </span>
+                  <br />
+                  <span>{message}</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
-    );
-}
+        <div>
+          <form style={formStyle} onSubmit={handleSendMessage}>
+            <input
+              value={value}
+              onChange={handleChange}
+              style={inputStyle}
+              type="text"
+              placeholder="Join the conversation..."
+              ref={newMessageRef}
+            />
+          </form>
+           <button style={buttonStyle} onClick={handleOnLeave}>
+            Leave room
+          </button>
+      </div>
+    </div>
+  );
+};
 
 const rootstyle: CSSProperties = {
     backgroundColor: "#999",
@@ -75,12 +134,12 @@ const chatsDivStyle: CSSProperties = {
     marginBottom: "2rem",
     marginTop: "1rem"
 }
-
+        
 const formStyle: CSSProperties = {
-    width: "100%",
-    textAlign: 'center',
-    height: "10%"
-}
+  width: '100%',
+  textAlign: 'center',
+  height: '10%',
+};
 
 export const buttonStyle: CSSProperties = {
   padding: "0.5em 1.5em",

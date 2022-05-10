@@ -24,11 +24,11 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
 
 
 
-app.get('/', (_, res) => res.send(`Server is running`));
+app.get('/', (_, res) => res.send(`Server is up and running`));
 
-httpServer.listen(port, host, () => {
+httpServer.listen(port, () => {
   console.log(`Server is running`);
-  console.log(`http://${host}:${port}`);
+  console.log(`http://${port}`);
   socket({ io })
 })
 
