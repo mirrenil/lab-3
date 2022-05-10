@@ -1,6 +1,8 @@
+import { format } from 'path';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client';
+import { flattenDiagnosticMessageText } from 'typescript';
 import { SOCKET_URL } from '../config/default';
 
 export interface User {
@@ -29,7 +31,7 @@ export interface ISocketContext {
   leaveRoom: () => void;
   isTyping: string;
   sendMessage: Function;
-  allUsersOnline: []
+  allUsersOnline: [];
 }
 
 const socket = io(SOCKET_URL, {
@@ -47,17 +49,17 @@ const SocketContext = createContext<ISocketContext>({
   leaveRoom: () => {},
   isTyping: '',
   sendMessage: () => '',
-  allUsersOnline: []
+  allUsersOnline: [],
 });
 
 const SocketProvider = (props: any) => {
   const [username, setUsername] = useState('');
   const [rooms, setRooms] = useState<Room[]>([]);
   const [roomId, setRoomId] = useState({});
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState({});
   const [isTyping, setIsTyping] = useState<string>('');
   const [currentRoom, setCurrentRoom] = useState<string>('');
-  const [newMessage, setNewMessage] = useState<string>('');
+  const [newMessage, setNewMessage] = useState({});
   const [allUsersOnline, setAllUsersOnline] = useState([]);
   const navigate = useNavigate();
 
@@ -75,19 +77,27 @@ const SocketProvider = (props: any) => {
       setCurrentRoom(value);
       console.log('JOINED_ROOM: ' + value);
       navigate('/chat');
-      setMessages([]);
+      // setMessages([]);
     });
+
+    socket.on('new message', message => {
+      const newM = messages;
+      console.log(newM)
+      
+    // direkt när man trycker att meddelandet ska skickas
+    // behöver message sättas
+    })
 
   }, []);
 
   useEffect(() => {
-
     socket.on('allUsersOnline', (users) => {
       setAllUsersOnline(users);
-      console.log(users);
-    })
+    });
+  }, [allUsersOnline]);
 
-  }, [allUsersOnline])
+
+ 
 
   socket.on('ROOMS', (value: any) => {
     setRooms(value);
@@ -107,16 +117,24 @@ const SocketProvider = (props: any) => {
       setCurrentRoom('');
       console.log(currentRoom);
       console.log('LEAVE ROOM END');
-      console.log(allUsersOnline)
+      console.log(allUsersOnline);
     });
   };
 
-  socket.on('message', (message, from) => {});
+  // socket.on('message', (message, from) => {});
 
-  const sendMessage = (message: string) => {
-    setNewMessage(message);
-    console.log(message);
+  const sendMessage = (content: string) => {
+    setNewMessage({
+      from: username,
+      to: currentRoom,
+      body: content,
+    });
+
+    socket.emit('send message', newMessage)
+
   };
+
+
 
   return (
     <SocketContext.Provider
@@ -132,7 +150,6 @@ const SocketProvider = (props: any) => {
         isTyping,
         sendMessage,
         allUsersOnline,
-
       }}
       {...props}
     />

@@ -68,6 +68,20 @@ function socket({ io }: { io: Server }) {
       socket.emit('JOINED_ROOM', roomId);
     });
 
+    socket.on("send message", (message: any) => {
+      console.log('IN S.ON MESSAGE')
+      console.log(message);
+      io.to(message.to).emit('new message', message);
+      
+
+      if (!socket.data.nickname) {
+          return socket.emit("_error", "Missing nickname on socket..")
+      }
+
+      // io.to(message.to).emit("message", message, { id: socket.id, nickname: socket.data.nickname })
+      // callback('message is sent')
+  })
+
     socket.on('LEAVE_ROOM', (room, callback) => {
       socket.leave(room);
       console.log(`${socket.data.username} has left room ${room}`);

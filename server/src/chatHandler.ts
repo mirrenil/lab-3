@@ -18,14 +18,16 @@ export default (io: Server, socket: Socket) => {
         socket.emit("joined", room)
     })
 
-    socket.on("message", (message, to) => {
-        console.log(message, to)
+    // socket.on("message", (message) => {
+    //     console.log('IN S.ON MESSAGE')
+    //     console.log(message.from, message.to);
 
-        if (!socket.data.nickname) {
-            return socket.emit("_error", "Missing nickname on socket..")
-        }
+    //     // if (!socket.data.nickname) {
+    //     //     return socket.emit("_error", "Missing nickname on socket..")
+    //     // }
 
-        io.to(to).emit("message", message, { id: socket.id, nickname: socket.data.nickname })
-    })
+    //     // io.to(message.to).emit("message", message, { id: socket.id, nickname: socket.data.nickname })
+    //     // callback('message is sent')
+    // })
 
 }

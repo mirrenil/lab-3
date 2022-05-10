@@ -53,7 +53,10 @@ const SideBar = () => {
         </ul>
 
         <div>
-          <h5>Users online:</h5>
+          <h5>
+          {allUsersOnline.length < 1 ? "No users online" : "Users online:"
+          }
+          </h5>
           {allUsersOnline.map((user: any) => {
             return <p key={user.username}>{user.username}</p>;
           })}

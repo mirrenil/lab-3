@@ -112,20 +112,22 @@ socket.on("joined", (room) => {
   renderForm();
 });
 
-socket.on("message", (message, from) => {
-  //console.log(message, from.nickname);
 
-  const chatItem = document.createElement("li");
-  //chatItem.textContent = from.nickname + ": " + message;
 
-  const messageList = document.getElementById("messages");
+// socket.on("message", (message, from) => {
+//   //console.log(message, from.nickname);
 
-  if (messageList) {
-    messageList.append(chatItem);
-  }
+//   const chatItem = document.createElement("li");
+//   //chatItem.textContent = from.nickname + ": " + message;
 
-  window.scrollTo(0, document.body.scrollHeight);
-});
+//   const messageList = document.getElementById("messages");
+
+//   if (messageList) {
+//     messageList.append(chatItem);
+//   }
+
+//   window.scrollTo(0, document.body.scrollHeight);
+// });
 
 socket.on("connected", (nickname) => {
   console.log("Connected: ", nickname);
