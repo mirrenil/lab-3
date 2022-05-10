@@ -26,15 +26,12 @@ export interface ISocketContext {
   rooms: Room[];
   roomId?: string;
   currentRoom: string;
-  setCurrentRoom: React.Dispatch<
-    React.SetStateAction<string>
-  >;
-  joinRoom: (
-  roomName: string
-  ) => void;
+  setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
+  joinRoom: (roomName: string) => void;
   leaveRoom: () => void;
   isTyping: string;
-  sendMessage: Function
+  sendMessage: Function;
+  allUsersOnline: []
 }
 
 const socket =
@@ -56,6 +53,7 @@ const socket =
     isTyping: '',
     sendMessage: () => '',
     messages:[],
+    allUsersOnline: []
   });
 
   const SocketProvider = (props: any) => {
@@ -65,7 +63,8 @@ const socket =
     const [messages, setMessages]  = useState([]as {message: string, username: string, time:string}[]);
     const [isTyping, setIsTyping] = useState<string>('')
     const [currentRoom, setCurrentRoom] = useState<string>('');
-    const [newMessage, setNewMessage] = useState<string>("")
+    const [newMessage, setNewMessage] = useState<string>("");
+    const [allUsersOnline, setAllUsersOnline] = useState([]);
     const navigate = useNavigate();
 
 
@@ -73,7 +72,6 @@ const socket =
       window.onfocus = function () {
         document.title = "Chat app";
       };
-    }, []);
 
       socket.on('connect_error', (err) => {
         console.log('ogiltigt användarnamn');
@@ -81,10 +79,42 @@ const socket =
 
     socket.on("JOINED_ROOM", (value: any) => {
       setRoomId(value)
+      setCurrentRoom(value);
       console.log("JOINED_ROOM: " + value)
       // navigate('/chat')
       setMessages([])
     })
+    }, []);
+
+    useEffect(() => {
+
+      socket.on('allUsersOnline', (users) => {
+        setAllUsersOnline(users);
+        console.log(users);
+      })
+  
+    }, [allUsersOnline])
+
+    useEffect(() => {
+      socket.on('ROOM_MESSAGE', ({message, username, time}) => {
+        if(!document.hasFocus()){
+          document.title = `new message: ${message}`;
+        }
+        setMessages((messages) => [...messages, { message, username, time }]);
+      })
+    }, [socket])
+
+    //   socket.on('connect_error', (err) => {
+    //     console.log('ogiltigt användarnamn');
+    //   });
+
+    // socket.on("JOINED_ROOM", (value: any) => {
+    //   setRoomId(value)
+    //   setCurrentRoom(value);
+    //   console.log("JOINED_ROOM: " + value)
+    //   // navigate('/chat')
+    //   setMessages([])
+    // })
 
 
 
@@ -98,38 +128,33 @@ const socket =
       if (username) {
         setIsTyping(`${username} is typing...`)
       }
-    })
 
-    
-      socket.on('left', (room) => {
-        console.log(
-          "left room"
-        );
-      })
-      
-       const leaveRoom = (roomName: string) => {
-         socket!.emit('leave', currentRoom)
-       };
 
-       socket.on('message', (message, from) => {
+  /**----------------------------------------------------------- */
 
-       })
-
-       
-   
-
+  /**------------------------------------------------------------------ */
     // const sendMessage = (message: string) => {
     //   setNewMessage(message);
     //   console.log(message);
     // }
-    useEffect(() => {
-    socket.on('ROOM_MESSAGE', ({message, username, time}) => {
-      if(!document.hasFocus()){
-        document.title = `new message: ${message}`;
-      }
-      setMessages((messages) => [...messages, { message, username, time }]);
-    })
-}, [socket])
+
+
+  socket.on('isTyping', (username: string) => {
+    if (username) {
+      setIsTyping(`${username} is typing...`);
+    }
+  });
+
+  const leaveRoom = () => {
+    console.log('LEAVE ROOM START');
+    console.log(currentRoom);
+    socket.emit('LEAVE_ROOM', currentRoom, (response: string) => {
+      console.log(response);
+      setCurrentRoom('');
+      console.log(currentRoom);
+      console.log('LEAVE ROOM END');
+    });
+  };
 
     return (
       <SocketContext.Provider
@@ -144,12 +169,15 @@ const socket =
           leaveRoom,
           isTyping,
           messages, 
-          setMessages
+          setMessages,
+          allUsersOnline,
         }}
         {...props}
       />
     );
-  };
-  
-  export const useSockets = () => useContext(SocketContext);
-  export default SocketProvider;
+
+
+})}
+
+export const useSockets = () => useContext(SocketContext);
+export default SocketProvider;

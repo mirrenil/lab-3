@@ -37,7 +37,9 @@ const NewRoom = ({ open, onClose }: Modal) => {
     if (!String(roomName).trim()) return;
 
     // emit room created event
-    socket.emit("CREATE_ROOM", { roomName, username });
+    socket.emit("CREATE_ROOM", { roomName, username }, (response: string) => {
+      console.log(response)
+    });
     
     console.log(username);
     // set room name input to empty string
