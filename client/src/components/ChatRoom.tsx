@@ -69,7 +69,8 @@ const ChatRoom = () => {
            <Icon icon="bx:log-out" />
           </button>
       <p>{currentRoom} name of room here</p>
-      <div style={chatsDivStyle}
+      <div style={chatsDivStyle} >
+
        {messages.map(({ message, username, time }, index) => {
           return ( <ChatBubble key={index} message={message} username={username} time={time} /> );
        })}
