@@ -1,7 +1,8 @@
 import { CSSProperties, useRef, useState } from 'react';
 import { useSockets } from '../Context/Socket.context';
 import { useNavigate } from 'react-router-dom';
-//import ChatBubble from "./ChatBubble";
+//import ChatBubble from "./ChatBubble";  
+import { Icon } from '@iconify/react';      
 import moment from 'moment';
 
 const ChatRoom = () => {
@@ -62,15 +63,16 @@ const ChatRoom = () => {
 
   return (
     <div style={rootstyle}>
+       <button style={buttonStyle} onClick={handleOnLeave}>
+           <Icon icon="bx:log-out" />
+          </button>
       <p>{currentRoom} name of room here</p>
       <div style={chatsDivStyle}>
         {/* <ChatBubble /> */}
-        <p>{currentRoom}</p>
-      </div>
-      <div>
-        {messages.map(({ message, username, time }, index) => {
-          return (
-            <div key={index}>
+        {/* <p>{currentRoom}</p> */}
+        <div>
+          {messages.map(({ message, username, time }, index) => {
+            return (
               <div key={index}>
                 <span>
                   {username} - {time}
@@ -78,24 +80,21 @@ const ChatRoom = () => {
                 <br />
                 <span>{message}</span>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
-      <div>
-        <form style={formStyle} onSubmit={handleSendMessage}>
-          <input
-            value={value}
-            onChange={handleChange}
-            style={inputStyle}
-            type="text"
-            placeholder="Join the conversation..."
-            ref={newMessageRef}
-          />
-        </form>
-        <button style={buttonStyle} onClick={handleOnLeave}>
-          Leave room
-        </button>
+        <div>
+          <form style={formStyle} onSubmit={handleSendMessage}>
+            <input
+              value={value}
+              onChange={handleChange}
+              style={inputStyle}
+              type="text"
+              placeholder="Join the conversation..."
+              ref={newMessageRef}
+            />
+          </form>
       </div>
     </div>
   );
@@ -113,13 +112,16 @@ const rootstyle: CSSProperties = {
 };
 
 const inputStyle: CSSProperties = {
-  width: '300px',
-  borderRadius: '50px',
-  border: 'none',
-  height: '2.5rem',
-  background: 'rgba(255, 255, 255, 0.3)',
-  paddingLeft: '5%',
-};
+
+    width: "300px",
+    borderRadius: "50px",
+    border: 'none',
+    height: '2.5rem',
+    background: "rgba(255, 255, 255, 0.3)",
+    paddingLeft: "5%",
+    marginBottom: "20px",
+}
+
 
 const chatsDivStyle: CSSProperties = {
   border: '2px solid #666',
@@ -137,21 +139,21 @@ const formStyle: CSSProperties = {
 };
 
 export const buttonStyle: CSSProperties = {
-  padding: '0.5em 1.5em',
-  margin: '0 0.3em 0.3em 0',
-  borderRadius: '2em',
-  color: '#FFFFFF',
-  backgroundColor: '#4eb5f1',
-  textAlign: 'center',
-  transition: 'all 0.2s',
-  fontSize: '1rem',
-  border: 'none',
-  cursor: 'pointer',
-  fontWeight: 'bold',
-  marginTop: '2.5rem',
-  marginBottom: '.1rem',
-  position: 'relative',
-  left: '30%',
+
+  padding: "0.5em 1.5em",
+  borderRadius: "2em",
+  color: "#FFFFFF",
+  backgroundColor: "transparent",
+  textAlign: "center",
+  transition: "all 0.2s",
+  fontSize: "2rem",
+  border: "none",
+  cursor: "pointer",
+  fontWeight: "bold",
+  marginTop: "1.5rem",
+  position: "fixed",
+  left: "250px",
+  top: "140px",
 };
 
 export default ChatRoom;
