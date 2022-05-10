@@ -115,14 +115,14 @@ const SideBar = ({ children }: Props) => {
     </div>
   );
 };
-// const btn: CSSProperties = {
-//   height: '3.5rem',
-//   width: '3.5rem',
-//   borderRadius: '100%',
-//   fontSize: '2.5rem',
-//   color: '#333',
-//   marginTop: '3rem',
-// };
+const btn: CSSProperties = {
+  height: '3.5rem',
+  width: '3.5rem',
+  borderRadius: '100%',
+  fontSize: '2.5rem',
+  color: '#333',
+  marginTop: '3rem',
+};
 
 // const sidebar: CSSProperties = {
 //   padding: '20px',
