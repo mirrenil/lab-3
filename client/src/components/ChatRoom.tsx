@@ -118,7 +118,7 @@ const rootstyle: CSSProperties = {
 }
 
 const inputStyle: CSSProperties = {
-    width: "50%",
+    width: "300px",
     borderRadius: "50px",
     border: 'none',
     height: '2.5rem',
@@ -153,8 +153,11 @@ export const buttonStyle: CSSProperties = {
   border: "none",
   cursor: "pointer",
   fontWeight: "bold",
-  marginTop: "1rem",
-  marginBottom: "1rem"
+  marginTop: "2.5rem",
+  marginBottom: ".1rem",
+  position: "relative",
+  left: "30%",
+
 };
 
 export default ChatRoom;
