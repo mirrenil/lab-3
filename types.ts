@@ -1,3 +1,12 @@
+export interface User { 
+  userId: string,
+  username?: string
+}
+
+export interface Message {
+  // { message, username, time }
+}
+
 export interface ServerToClientEvents {
   message: (message: string, from: {id: string, username: string}) => void;
   connected: (username: string) => void;
@@ -6,6 +15,7 @@ export interface ServerToClientEvents {
   left: (room: string) => void;
   _error: (errorMessage: string) => void;
   isTyping: (username: string) => void;
+  allUsersOnline: (users: User[]) => void;
 }
 
 export interface ClientToServerEvents {

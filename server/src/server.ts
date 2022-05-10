@@ -22,6 +22,8 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
   }
 });
 
+export type IOServer = typeof io;
+
 
 
 app.get('/', (_, res) => res.send(`Server is up and running`));
