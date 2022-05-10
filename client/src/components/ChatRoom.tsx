@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ChatBubble from "./ChatBubble";  
 import { Icon } from '@iconify/react';      
 import moment from 'moment';
+import { time } from 'console';
 
 
 const ChatRoom = () => {
@@ -74,23 +75,9 @@ const ChatRoom = () => {
           </button>
       <p>{currentRoom} name of room here</p>
       <div style={chatsDivStyle}>
-        <ChatBubble />
-        {/* <p>{currentRoom}</p> */}
-        {/* <div>
-          {messages.map(({ message, username, time }, index) => {
-            return (
-              <div key={index}>
-                <div key={index}>
-                  <span>
-                    {username} - {time}
-                  </span>
-                  <br />
-                  <span>{message}</span>
-                </div>
-              </div>
-            );
-          })}
-        </div> */}
+       {messages.map(({ message, username, time }, index) => {
+          return ( <ChatBubble key={index} message={message} username={username} time={time} /> );
+       })}
       </div>
         
         <div>
