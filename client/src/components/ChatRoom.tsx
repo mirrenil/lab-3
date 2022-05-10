@@ -121,9 +121,11 @@ const chatsDivStyle: CSSProperties = {
     border: '2px solid #666',
     borderRadius: '10px',
     height: "85%",
+    maxHeight: "50rem",
     width: "60%",
     marginBottom: "2rem",
-    marginTop: "1rem"
+    marginTop: "1rem",
+    overflow: "scroll"
 }
         
 const formStyle: CSSProperties = {
