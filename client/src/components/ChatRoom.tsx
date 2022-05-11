@@ -28,6 +28,10 @@ const ChatRoom = () => {
     setValue(e.target.value);
   };
 
+  const handleTyping = (e: any) => {
+      socket?.emit('typing', currentRoom);
+  }
+
   function handleSendMessage(e: any) {
     const message = newMessageRef.current?.value;
 
@@ -91,6 +95,7 @@ const ChatRoom = () => {
               type="text"
               placeholder="Join the conversation..."
               ref={newMessageRef}
+              onKeyDown={handleTyping}
             />
           </form>
       </div>
