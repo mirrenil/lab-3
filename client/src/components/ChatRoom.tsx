@@ -15,7 +15,6 @@ const ChatRoom = () => {
     messages,
     setMessages,
     currentRoom,
-    sendMessage,
     roomId,
   } = useSockets();
 
@@ -42,7 +41,7 @@ const ChatRoom = () => {
       {
         username: 'You',
         message,
-        time: moment().format(`HH:mm`),
+        time: moment().calendar(),
       },
     ]);
     if (newMessageRef && newMessageRef.current) {
@@ -109,10 +108,10 @@ const rootstyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+ 
 };
 
 const inputStyle: CSSProperties = {
-
     width: "300px",
     borderRadius: "50px",
     border: 'none',
@@ -139,7 +138,6 @@ const formStyle: CSSProperties = {
 };
 
 export const buttonStyle: CSSProperties = {
-
   padding: "0.5em 1.5em",
   borderRadius: "2em",
   color: "#FFFFFF",
@@ -151,7 +149,6 @@ export const buttonStyle: CSSProperties = {
   cursor: "pointer",
   fontWeight: "bold",
   marginTop: "1.5rem",
-  position: "fixed",
   left: "250px",
   top: "140px",
 };
