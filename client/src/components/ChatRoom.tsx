@@ -75,7 +75,12 @@ const ChatRoom = () => {
        {messages.map(({ message, username, time }, index) => {
           return ( <ChatBubble key={index} message={message} username={username} time={time} /> );
        })}
-        <IsTyping />
+
+       {!username ?  (
+         <IsTyping/>
+         ) : (
+           null
+         )}
       </div>
         <div>
           <form style={formStyle} onSubmit={handleSendMessage}>
