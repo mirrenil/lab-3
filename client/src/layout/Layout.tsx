@@ -6,11 +6,13 @@ import Header from '../components/Header'
 
 function Layout() {
   return (
-    <div>
+    <>
      <Header/>
+     <div style={{display: 'flex'}}>
      <SideBar/>
      <Outlet />
-    </div>
+     </div>
+    </>
   )
 }
 
