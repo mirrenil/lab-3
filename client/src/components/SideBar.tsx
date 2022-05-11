@@ -26,8 +26,8 @@ const SideBar = ({ children }: Props) => {
   const navigate = useNavigate();
 
   const handleOnLogOut = () => {
-    window.location.reload();
     navigate('/');
+    window.location.reload();
   };
 
   const handleJoinRoom = (key: any) => {
