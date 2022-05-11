@@ -34,21 +34,21 @@ const SideBar = ({ children }: Props) => {
     navigate('/');
   };
  
-  function UsersDiv() {
-    return (
-      <div>
-        {!usersInRoom
-          ? null
-          : usersInRoom.map((user: string) => {
-            return (
-              <div className="room-users-list" key={user + user}>
-                <p className="user-list-icon"> {user.charAt(0)} </p>
-                <p >{user}</p>
-              </div> )
-            })}
-      </div>
-    );
-  }
+  // function UsersDiv() {
+  //   return (
+  //     <div>
+  //       {!usersInRoom
+  //         ? null
+  //         : usersInRoom.map((user: string) => {
+  //           return (
+  //             <div className="room-users-list" key={user + user}>
+  //               <p className="user-list-icon"> {user.charAt(0)} </p>
+  //               <p >{user}</p>
+  //             </div> )
+  //           })}
+  //     </div>
+  //   );
+  // }
   
   const handleJoinRoom = (key: any) => {
     socket.emit('JOIN_ROOM', key);
@@ -120,10 +120,10 @@ const SideBar = ({ children }: Props) => {
 
 
 
-        <div className='room-users-container'>
+        {/* <div className='room-users-container'>
           <h5 className = 'room-users-title'>{!currentRoom ? "" : "Users in room:"}{usersInRoom.length}</h5>
           <UsersDiv />
-        </div>
+        </div> */}
 
       </div>
 
