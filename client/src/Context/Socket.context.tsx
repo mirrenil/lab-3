@@ -112,7 +112,7 @@ const SocketProvider = (props: any) => {
       setMessages((messages) => [...messages, { message, username, time }]);
     });
 
-  }, [socket]);
+  }, []);
 
   useEffect(() => {
     socket.emit('usersInRoom', currentRoom, (response: any) => {
