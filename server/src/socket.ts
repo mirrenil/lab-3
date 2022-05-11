@@ -111,9 +111,7 @@ function socket({ io }: { io: IOServer }) {
     });
 
     socket.on("isTyping", (room) => {
-      socket.broadcast
-        .to(room)
-        .emit("isTyping", `${socket.data.username}`, "is typing");
+      socket.broadcast.to(room).emit("isTyping", socket.data.username);
     });
   });
 }

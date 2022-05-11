@@ -4,7 +4,9 @@ import { useSockets } from "../Context/Socket.context";
  const IsTyping = () => {
     const { isTyping, username } = useSockets();
 
-    return <div style={rootStyle}>{username} is typing...</div>
+
+
+    return <div style={rootStyle}>{isTyping}</div>
 };
 
 const rootStyle: CSSProperties = {
