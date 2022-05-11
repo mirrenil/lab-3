@@ -103,6 +103,7 @@ function socket({ io }: { io: IOServer }) {
       console.log("user disconnected");
     });
 
+    // CALLBACK NOT WORKING!!
     socket.on("LEAVE_ROOM", (room, callback) => {
       socket.leave(room);
       console.log(`${socket.data.username} has left room ${room}`);
@@ -110,7 +111,9 @@ function socket({ io }: { io: IOServer }) {
     });
 
     socket.on("isTyping", (room) => {
-      socket.broadcast.to(room).emit("isTyping", room);
+      socket.broadcast
+        .to(room)
+        .emit("isTyping", `${socket.data.username}`, "is typing");
     });
   });
 }
