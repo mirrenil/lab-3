@@ -28,7 +28,7 @@ const ChatRoom = () => {
   };
 
   const handleTyping = (e: any) => {
-      socket.emit('typing', currentRoom);
+      socket.emit('isTyping', currentRoom);
       console.log('isTyping')
   }
 
