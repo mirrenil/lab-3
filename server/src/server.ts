@@ -3,37 +3,44 @@ import { createServer } from "http";
 import { Server, Socket } from "socket.io";
 import config from "config";
 
-import { ClientToServerEvents, ServerToClientEvents, InterServerEvents, ServerSocketData } from "../../types";
+import {
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  ServerSocketData,
+} from "../../types";
 import { getRooms } from "./roomStore";
-import registerChatHandler from './chatHandler'
-import socket from "./socket"
+import registerChatHandler from "./chatHandler";
+import socket from "./socket";
 
-const port = config.get<number>("port")
-const host = config.get<string>("host")
-const corsOrigin = config.get<string>("corsOrigin")
+const port = config.get<number>("port");
+const host = config.get<string>("host");
+const corsOrigin = config.get<string>("corsOrigin");
 
 const app = express();
-const httpServer = createServer(app)
+const httpServer = createServer(app);
 
-const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, ServerSocketData>(httpServer, {
-  cors:{
+const io = new Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  ServerSocketData
+>(httpServer, {
+  cors: {
     origin: corsOrigin,
     credentials: true,
-  }
+  },
 });
 
 export type IOServer = typeof io;
 
-
-
-app.get('/', (_, res) => res.send(`Server is up and running`));
+app.get("/", (_, res) => res.send(`Server is up and running`));
 
 httpServer.listen(port, () => {
   console.log(`Server is running`);
-  console.log(`http://${port}`);
-  socket({ io })
-})
-
+  console.log(`http://${host}:${port}`);
+  socket({ io });
+});
 
 /*  
 

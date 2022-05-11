@@ -1,9 +1,11 @@
 import { CSSProperties, useRef, useState } from 'react';
 import { useSockets } from '../Context/Socket.context';
 import { useNavigate } from 'react-router-dom';
-//import ChatBubble from "./ChatBubble";  
+import ChatBubble from "./ChatBubble";  
 import { Icon } from '@iconify/react';      
 import moment from 'moment';
+import { time } from 'console';
+
 
 const ChatRoom = () => {
   const [value, setValue] = useState<string>('');
@@ -66,22 +68,12 @@ const ChatRoom = () => {
            <Icon icon="bx:log-out" />
           </button>
       <p>{currentRoom} name of room here</p>
-      <div style={chatsDivStyle}>
-        {/* <ChatBubble /> */}
-        {/* <p>{currentRoom}</p> */}
-        <div>
-          {messages.map(({ message, username, time }, index) => {
-            return (
-              <div key={index}>
-                <span>
-                  {username} - {time}
-                </span>
-                <br />
-                <span>{message}</span>
-              </div>
-            );
-          })}
-        </div>
+      <div style={chatsDivStyle} >
+
+       {messages.map(({ message, username, time }, index) => {
+          return ( <ChatBubble key={index} message={message} username={username} time={time} /> );
+       })}
+
       </div>
         <div>
           <form style={formStyle} onSubmit={handleSendMessage}>
@@ -123,13 +115,17 @@ const inputStyle: CSSProperties = {
 
 
 const chatsDivStyle: CSSProperties = {
-  border: '2px solid #666',
-  borderRadius: '10px',
-  height: '85%',
-  width: '60%',
-  marginBottom: '2rem',
-  marginTop: '1rem',
-};
+
+    border: '2px solid #666',
+    borderRadius: '10px',
+    height: "85%",
+    maxHeight: "50rem",
+    width: "60%",
+    marginBottom: "2rem",
+    marginTop: "1rem",
+    overflow: "scroll"
+}
+        
 
 const formStyle: CSSProperties = {
   width: '100%',
