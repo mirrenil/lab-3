@@ -29,7 +29,8 @@ const ChatRoom = () => {
   };
 
   const handleTyping = (e: any) => {
-      socket?.emit('typing', currentRoom);
+      socket.emit('typing', currentRoom);
+      console.log('isTyping')
   }
 
   function handleSendMessage(e: any) {
@@ -79,12 +80,7 @@ const ChatRoom = () => {
        {messages.map(({ message, username, time }, index) => {
           return ( <ChatBubble key={index} message={message} username={username} time={time} /> );
        })}
-
-       {!username ?  (
          <IsTyping/>
-         ) : (
-           null
-         )}
       </div>
         <div>
           <form style={formStyle} onSubmit={handleSendMessage}>
