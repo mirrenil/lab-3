@@ -10,7 +10,6 @@ import SocketProvider from './Context/Socket.context';
 function App() {
   return (
     <ErrorBoundary>
-      <SocketProvider>
       <Routes>
         <Route path="/" element={<Layout />}>
         <Route index element={<StartPage />} />
@@ -19,7 +18,6 @@ function App() {
         <Route path="*" element={<BadGate />} />
         </Route>
       </Routes>
-      </SocketProvider>
     </ErrorBoundary>
   )
 }
