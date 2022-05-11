@@ -129,8 +129,9 @@ const SocketProvider = (props: any) => {
   });
 
   socket.on('isTyping', (username: string) => {
-    if (username !== 'You')
+    if (username)
       setIsTyping(`${username} is typing...`);
+      setTimeout(() => setIsTyping(''), 2000);
     }
   );
 
