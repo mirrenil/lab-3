@@ -6,6 +6,7 @@ import BadGate from "./components/BadGate"
 import Layout from './layout/Layout';
 import Lobby from './components/Lobby';
 import ChatRoom from './components/ChatRoom';
+import SocketProvider from './Context/Socket.context';
 function App() {
   return (
     <ErrorBoundary>

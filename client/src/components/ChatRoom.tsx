@@ -5,6 +5,7 @@ import ChatBubble from "./ChatBubble";
 import { Icon } from '@iconify/react';      
 import moment from 'moment';
 import { time } from 'console';
+import IsTyping from './IsTyping';
 
 
 const ChatRoom = () => {
@@ -25,6 +26,11 @@ const ChatRoom = () => {
   const handleChange = (e: any) => {
     setValue(e.target.value);
   };
+
+  const handleTyping = (e: any) => {
+      socket.emit('typing', currentRoom);
+      console.log('isTyping')
+  }
 
   function handleSendMessage(e: any) {
     const message = newMessageRef.current?.value;
@@ -73,7 +79,7 @@ const ChatRoom = () => {
        {messages.map(({ message, username, time }, index) => {
           return ( <ChatBubble key={index} message={message} username={username} time={time} /> );
        })}
-
+         <IsTyping/>
       </div>
         <div>
           <form style={formStyle} onSubmit={handleSendMessage}>
@@ -84,6 +90,7 @@ const ChatRoom = () => {
               type="text"
               placeholder="Join the conversation..."
               ref={newMessageRef}
+              onKeyDown={handleTyping}
             />
           </form>
       </div>

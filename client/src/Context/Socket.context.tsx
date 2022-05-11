@@ -129,10 +129,11 @@ const SocketProvider = (props: any) => {
   });
 
   socket.on('isTyping', (username: string) => {
-    if (username) {
+    if (username)
       setIsTyping(`${username} is typing...`);
+      setTimeout(() => setIsTyping(''), 2000);
     }
-  });
+  );
 
   const leaveRoom = () => {
     console.log('LEAVE ROOM START');

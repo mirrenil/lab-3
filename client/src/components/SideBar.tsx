@@ -29,9 +29,8 @@ const SideBar = ({ children }: Props) => {
   const navigate = useNavigate();
 
   const handleOnLogOut = () => {
-    //localStorage.removeItem('user');
-    //setUsername(null)
     navigate('/');
+    window.location.reload();
   };
  
   // function UsersDiv() {

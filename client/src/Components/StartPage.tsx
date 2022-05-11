@@ -14,7 +14,6 @@ const StartPage = () => {
       ) : (
        null
       )}
-      {/* <UserInputComponent /> */}
     </div>
   )
 }
