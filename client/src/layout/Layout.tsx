@@ -7,8 +7,7 @@ import Header from '../components/Header'
 function Layout() {
   return (
     <>
-     <Header/>
-     <div style={{display: 'flex'}}>
+     <div style={{display: 'flex', backgroundColor: "#222"}}>
      <SideBar/>
      <Outlet />
      </div>

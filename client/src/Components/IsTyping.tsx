@@ -2,7 +2,7 @@ import { CSSProperties } from "react";
 import { useSockets } from "../Context/Socket.context";
 
  const IsTyping = () => {
-    const { isTyping, username } = useSockets();
+    const { isTyping} = useSockets();
 
 
 
@@ -10,7 +10,7 @@ import { useSockets } from "../Context/Socket.context";
 };
 
 const rootStyle: CSSProperties = {
-    color: '#444',
+    color: '#fff',
     marginLeft: '1.3rem',
     fontSize: '.8rem',
     fontWeight: 'thin',
