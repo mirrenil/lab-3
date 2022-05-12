@@ -6,11 +6,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: rgb(5, 3, 15);
+  /* height: 100vh; */
 }
 
 #root {
   max-width: 80rem;
-  margin: auto
+  margin: auto;
+  height: 90vh;
 }
 
 code {
