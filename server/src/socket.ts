@@ -48,12 +48,6 @@ function socket({ io }: { io: IOServer }) {
 
     });
 
-
-    // const renderUsersInRoom = async (room: string) => {
-    //   let roomUsers = await io.in(room).fetchSockets();
-    //   console.log(roomUsers);
-    // }
-
     console.log(`User is connected ${socket.id}`);
 
     socket.emit("welcome", `welcome new user!`);
