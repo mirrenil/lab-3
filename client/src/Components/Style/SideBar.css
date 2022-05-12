@@ -1,21 +1,22 @@
 .sideBar-container {
-  padding-top: 1em;
   display: flex;
   flex-direction: column;
-  height: 100vh;
   width: 20%;
   background: linear-gradient(#222020, #202027);
   position: relative;
-  height: 100vh;
+  height: 100%;
   border: solid 5px rgba(31, 209, 241, 0.452);
+  box-sizing: border-box;
 
+}
+
+.logout {
+  width: 100%;
+  text-align: center;
 }
 
 .logout-icon {
   color: #f78d8d;
-  position: absolute;
-  left: .5em;
-  top: .5em;
   font-size: 2em;
   cursor: pointer;
   width: 50px;
@@ -25,7 +26,6 @@
   font-size: 2em;
   cursor: pointer;
   margin-top: 3rem;
-  left: 30%
 }
 
 .usernameDiv {
