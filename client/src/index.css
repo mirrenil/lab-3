@@ -6,12 +6,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #222;
+
 }
 
 #root {
   max-width: 80rem;
-  margin: auto;
-  height: 90vh;
+  margin: auto
 }
 
 code {
