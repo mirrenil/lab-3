@@ -44,8 +44,6 @@ function socket({ io }: { io: IOServer }) {
         return;
       };
       fetchUsers();
-      // callback(roomUsers);
-
     });
 
     console.log(`User is connected ${socket.id}`);
