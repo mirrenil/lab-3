@@ -2,7 +2,7 @@ import { Socket } from "socket.io";
 import { nanoid } from "nanoid";
 import moment from "moment";
 import type { IOServer } from "./server";
-import {getRooms} from './roomStore'
+
 
 const rooms: Record<string, { name: string }> = {};
 
@@ -45,8 +45,7 @@ function socket({ io }: { io: IOServer }) {
       };
       fetchUsers();
       // callback(roomUsers);
-      const test = getRooms(io);
-      console.log(test);
+
     });
 
 
