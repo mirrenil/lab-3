@@ -1,16 +1,16 @@
 .chat-room-container {
-  width: 100%;
+  width: 70%;
   max-height: 100vh;
-  background: linear-gradient(#222020, #202027);
+  background: #222;
   display: flex;
   flex-direction: column;
-  border: solid 5px rgba(31, 209, 241, 0.452);
+  border: solid 1px rgba(31, 209, 241, 0.452);
   position: relative;
   box-sizing: border-box;
-
+  border-radius: 5px;
 }
 
-.chat-container-header{
+.chat-container-header {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,23 +18,26 @@
   text-transform: uppercase;
   font-weight: 900;
 }
-.leave-room-icon{
+
+.leave-room-icon {
   border-radius: 5em;
   font-size: 2em;
   color: #f78d8d;
   background: transparent;
   border: #f78d8d;
   position: absolute;
-  left: 0;
+  left: .5rem;
   top: .5em;
   cursor: pointer;
 }
-.message-container{
+
+.message-container {
   max-height: 70vh;
   width: 100%;
   margin-top: 3em;
 }
-.send-message-form{
+
+.send-message-form {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -44,12 +47,15 @@
   width: 100%;
 }
 
-.send-message-form input{
-  width: 88%;
-  height: 2rem;
-  padding: .5em;
+.send-message-form input {
+  width: 80%;
+  height: 1.7rem;
+  padding: .7rem;
+  border-radius: 5px;
+  margin: 1rem;
 }
-.sent-icon{
+
+.sent-icon {
   height: 3rem;
   font-size: 1em;
   width: 8%;
@@ -60,10 +66,12 @@
   border-radius: .5em;
   cursor: pointer;
 }
+
 .chat-container {
   margin-left: 10em;
 }
-.you{
+
+.you {
   background-color: rgb(24, 82, 158);
   display: flex;
   flex-direction: column;
@@ -73,7 +81,8 @@
   border-radius: .5em;
   padding: .5em;
 }
-.other{
+
+.other {
   background-color: rgba(255, 255, 255, 0.3);
   display: flex;
   flex-direction: column;
@@ -82,6 +91,7 @@
   border-radius: .5em;
   padding: .5em;
 }
+
 .message-time {
   font-size: .5em;
   color: #f1f1f1;
@@ -91,19 +101,21 @@
   margin-bottom: .2em;
   color: #0cee32;
 }
-.message-header{ 
+
+.message-header {
   display: flex;
   justify-content: space-between;
 
 }
-.other .message-time{
+
+.other .message-time {
   order: 1;
 }
 
-.other .message-username{
+.other .message-username {
   color: #5af17b;
 }
 
-.message-body{
+.message-body {
   color: #f1f1f1;
 }
