@@ -2,6 +2,7 @@ import { Socket } from "socket.io";
 import { nanoid } from "nanoid";
 import moment from "moment";
 import type { IOServer } from "./server";
+import {getRooms} from './roomStore'
 
 const rooms: Record<string, { name: string }> = {};
 
@@ -22,6 +23,7 @@ function socket({ io }: { io: IOServer }) {
   });
 
   io.on("connection", (socket: Socket) => {
+
     const users = [];
     for (let [id, socket] of io.of("/").sockets) {
       users.push({
@@ -32,13 +34,10 @@ function socket({ io }: { io: IOServer }) {
     }
 
     socket.on("usersInRoom", (roomName: string, callback) => {
-      console.log("usersinroom:", roomName);
-
       const fetchUsers = async () => {
         let users = [];
         let roomUsers = await io.in(roomName).fetchSockets();
         for (let user of roomUsers) {
-          console.log(user.data.username);
           users.push(user.data.username);
         }
         callback(users);
@@ -46,7 +45,11 @@ function socket({ io }: { io: IOServer }) {
       };
       fetchUsers();
       // callback(roomUsers);
+      const test = getRooms(io);
+      console.log(test);
     });
+
+
     // const renderUsersInRoom = async (room: string) => {
     //   let roomUsers = await io.in(room).fetchSockets();
     //   console.log(roomUsers);
