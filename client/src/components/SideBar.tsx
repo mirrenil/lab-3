@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import NewRoom from './NewRoom';
 import { useSockets } from '../Context/Socket.context';
 
-import  './Style/SideBar.css';
+import './Style/SideBar.css';
 import { BiLogOutCircle } from "react-icons/bi";
 
 
@@ -29,11 +29,11 @@ const SideBar = ({ children }: Props) => {
   const navigate = useNavigate();
 
   const handleOnLogOut = () => {
-    //localStorage.removeItem('user');
-    //setUsername(null)
     navigate('/');
+    window.location.reload();
+
   };
- 
+
   // function UsersDiv() {
   //   return (
   //     <div>
@@ -49,7 +49,7 @@ const SideBar = ({ children }: Props) => {
   //     </div>
   //   );
   // }
-  
+
   const handleJoinRoom = (key: any) => {
     socket.emit('JOIN_ROOM', key);
 
@@ -58,19 +58,13 @@ const SideBar = ({ children }: Props) => {
         console.log(`${response} and joined ${key}`);
       });
     }
-    
+
 
   };
 
   console.log(usersInRoom.length);
   return (
     <div className="sideBar-container">
-      <div className="logout">
-      <BiLogOutCircle 
-      onClick={handleOnLogOut}
-      className="logout-icon"
-      />
-      </div>
       <div>
         <div className="usernameDiv">
           <div className="user-icon"> {username?.charAt(0)} </div>
@@ -78,48 +72,49 @@ const SideBar = ({ children }: Props) => {
 
         </div>
         <div className="create-room">
-        <button  onClick={() => setIsAddNewRoomOpen(true)}>
-          +
-        </button>
+          <button onClick={() => setIsAddNewRoomOpen(true)}>
+            +
+          </button>
         </div>
         <div className="available-rooms-container">
           <h5 className="available-rooms-header">Open rooms</h5>
 
           <ul className="rooms-list">
-          {Object.keys(rooms).map((key: any) => {
-            return (
-              <div key={key}>
-                <button
-                  className = 'button room-list-button'
-                  disabled={key === roomId}
-                  onClick={() => handleJoinRoom(key)}
-                  title={`Join ${rooms[key].name}`}
-                >
-                  {rooms[key].name}
-                </button>
-              </div>
-            );
-          })}
-        </ul>
+            {Object.keys(rooms).map((key: any) => {
+              return (
+                <div key={key}>
+                  <button
+                    className='button room-list-button'
+                    disabled={key === roomId}
+                    onClick={() => handleJoinRoom(key)}
+                    title={`Join ${rooms[key].name}`}
+                  >
+                    {rooms[key].name}
+                  </button>
+                </div>
+              );
+            })}
+          </ul>
         </div>
-        
+
         <div className="online-users-container">
           <h5>online Users : {allUsersOnline.length}</h5>
           {allUsersOnline.map((user: any) => {
             return (
               <div className='online-users-list' key={user.username}>
-              <p className="user-list-icon"> {user.username.charAt(0)} </p>
-              <h3 className = 'online-user'> {user.username} </h3>
+                <p className="user-list-icon"> {user.username.charAt(0)} </p>
+                <h3 className='online-user'> {user.username} </h3>
               </div>
-              );
+            );
           })}
 
-
-         
         </div>
-
-
-
+        <div className="logout">
+          <BiLogOutCircle
+            onClick={handleOnLogOut}
+            className="logout-icon"
+          />
+        </div>
         {/* <div className='room-users-container'>
           <h5 className = 'room-users-title'>{!currentRoom ? "" : "Users in room:"}{usersInRoom.length}</h5>
           <UsersDiv />

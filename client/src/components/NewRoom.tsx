@@ -24,7 +24,6 @@ const NewRoom = ({ open, onClose }: Modal) => {
     setNewRoomName(roomName)
     onClose();
     navigate('/chat');
-    console.log('Room created!');
     return;
   };
 
@@ -68,7 +67,7 @@ return ReactDOM.createPortal(
             </button>
           </form>
         </div>
-        <button style={closeButtonStyle}>
+        <button style={closeButtonStyle} onClick={()=> onClose()}>
           X
         </button>
       </div>
@@ -121,7 +120,7 @@ const submitButtonStyle: CSSProperties = {
   backgroundColor: '#777',
   border: 'none',
   borderRadius: '10px',
-  fontSize: '1.3rem',
+  fontSize: '1rem',
 };
 
 export default NewRoom;
