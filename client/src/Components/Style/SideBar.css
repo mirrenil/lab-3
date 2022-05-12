@@ -1,18 +1,21 @@
 .sideBar-container {
-  padding: 0;
+  padding-top: 1em;
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 20%;
-  padding-top: 1em;
   background: linear-gradient(#222020, #202027);
   position: relative;
+  height: 100vh;
+  border: solid 5px rgba(31, 209, 241, 0.452);
+
 }
 
 .logout-icon {
   color: #f78d8d;
   position: absolute;
   left: .5em;
+  top: .5em;
   font-size: 2em;
   cursor: pointer;
   width: 50px;
@@ -70,7 +73,7 @@
   border-radius: 5em;
   font-size: 2em;
   color: #f1f1f1;
-  background-color: #0acff1b4;
+  background-color: #0acef123;
   box-shadow: 0px 1px 5px 5px rgba(38, 165, 238, 0.329);
   cursor: pointer;
 }
@@ -177,4 +180,8 @@
 
 .room-users-container.active {
   display: block;
+}
+.none {
+  background-color: rgba(236, 22, 22, 0.329);
+
 }

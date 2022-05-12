@@ -10,7 +10,7 @@ import { useSockets } from "../Context/Socket.context";
 };
 
 const rootStyle: CSSProperties = {
-    color: '#fff',
+    color: '#f1f1f16c',
     marginLeft: '1.3rem',
     fontSize: '.8rem',
     fontWeight: 'thin',

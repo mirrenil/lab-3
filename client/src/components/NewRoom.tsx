@@ -55,7 +55,7 @@ return ReactDOM.createPortal(
           </h2>
           <form onSubmit={handleOnSubmit}>
             <input
-              style={{ width: '100%', height: '3rem', marginBottom: '1rem', fontSize: '1.5rem' }}
+              style={{ width: '100%', height: '3rem', marginBottom: '1rem', fontSize: '1.5rem',  borderRadius: '22px', padding: '0.5rem' }}
               type="text"
               value={roomName}
               onChange={handleOnChange}
@@ -68,7 +68,11 @@ return ReactDOM.createPortal(
             </button>
           </form>
         </div>
-        <button style={closeButtonStyle} onClick={()=> onClose()}>
+
+        <button 
+        style={closeButtonStyle}
+        onClick={ () => onClose()}
+        >
           X
         </button>
       </div>
@@ -82,7 +86,7 @@ const modalStyles: CSSProperties = {
   top: '56%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  backgroundColor: '#999',
+  backgroundColor: '#202027',
   padding: '50px',
   zIndex: 1000,
   width: '30rem',
@@ -91,6 +95,7 @@ const modalStyles: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
+  color: '#f1f1f1'
 };
 
 const overlayStyles: CSSProperties = {
@@ -111,17 +116,25 @@ const closeButtonStyle: CSSProperties = {
   height: '2.5rem',
   width: '2.5rem',
   background: 'transparent',
-  border: 'none',
+  border: '.5px solid #f78d8d',
+  borderRadius: '5em',
+  cursor: 'pointer',
+  color: '#f78d8d'
 };
 
 const submitButtonStyle: CSSProperties = {
-  height: '2.5rem',
-  width: '5rem',
-  color: 'white',
-  backgroundColor: '#777',
+  borderRadius: '100px',
+  height: '3rem',
+  width: '8rem',
+  marginRight: '1rem',
+  padding: '.3em',
+  cursor: 'pointer',
+  backgroundColor: '#0acef123',
+  color: '#FFFFFF',
   border: 'none',
-  borderRadius: '10px',
-  fontSize: '1rem',
+
+
+
 };
 
 export default NewRoom;

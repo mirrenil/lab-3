@@ -27,8 +27,9 @@ const usernameInputDivStyle: CSSProperties = {
   position: "absolute",
   zIndex: "100",
   top: 0,
-  left: 0,
-  height: "100vh",
+  left: "0",
+  height: "122vh",
+
   width: "100%",
   background: "rgba(0, 0, 0, 0.9)",
   display: "flex",

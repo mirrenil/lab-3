@@ -29,7 +29,7 @@ const UserInputComponent = () => {
 
   return (
       <div style={rootstyle}>
-        <p>Choose your username:</p>
+        <p>Choose your username</p>
         <form onSubmit={handleOnSubmit}>
           <input
             style={inputStyle}
@@ -38,7 +38,7 @@ const UserInputComponent = () => {
             onChange={handleOnChange}
             minLength={3}
           ></input>
-          <button className="button" type="submit">
+          <button style={btnStyle} type="submit">
             Done
           </button>
         </form>
@@ -47,20 +47,32 @@ const UserInputComponent = () => {
 };
 
 const rootstyle: CSSProperties = {
-  width: '30rem',
-  height: '10rem',
+  width: '100%',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-around',
   flexDirection: 'column',
+  color: 'white',
+  position: 'absolute',
 };
 
 const inputStyle: CSSProperties = {
-  borderRadius: '100px',
+  borderRadius: '1em',
   height: '2rem',
   width: '10rem',
   marginRight: '1rem',
-  padding: '.3em'
+  padding: '.5em',
+  fontSize: '1.2em'
+};
+const btnStyle: CSSProperties = {
+  borderRadius: '100px',
+  height: '3rem',
+  width: '5rem',
+  marginRight: '1rem',
+  padding: '.3em',
+  cursor: 'pointer',
+  backgroundColor: '#0acef123',
+  color: '#FFFFFF'
 };
 
 export default UserInputComponent;

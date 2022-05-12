@@ -22,11 +22,12 @@ const Header = () => {
 // };
 
 const headerStyle: CSSProperties = {
-backgroundColor: "#777",
+backgroundColor: "#202027",
 display: "flex",
 justifyContent: "center",
 height: "8rem",
 margin: "0",
+color: "white",
 }
 
 export default Header;
