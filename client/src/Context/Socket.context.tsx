@@ -29,6 +29,7 @@ export interface ISocketContext {
   roomId?: string;
   currentRoom: string;
   setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
+  createRoom: (a: string, b: string) => void;
   joinRoom: (roomName: string) => void;
   leaveRoom: () => void;
   isTyping: string;
@@ -49,17 +50,18 @@ const SocketContext = createContext<ISocketContext>({
   rooms: [],
   currentRoom: '',
   setCurrentRoom: () => {},
+  createRoom: () => "",
   joinRoom: () => {},
   leaveRoom: () => {},
   isTyping: '',
   sendMessage: () => '',
   messages: [],
   allUsersOnline: [],
-  usersInRoom: []
+  usersInRoom: [],
 });
 
 const SocketProvider = (props: any) => {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState<string>('');
   const [rooms, setRooms] = useState<Room[]>([]);
   const [roomId, setRoomId] = useState({});
   const [messages, setMessages] = useState(
@@ -89,6 +91,7 @@ const SocketProvider = (props: any) => {
       setMessages([]);
     });
 
+
   }, []);
 
   useEffect(() => {
@@ -100,7 +103,7 @@ const SocketProvider = (props: any) => {
     return () => {
       socket.off('allUsersOnline', listener);
     };
-  }, [allUsersOnline]);
+  }, []);
 
   useEffect(() => {
     console.log('ADD MESSAE SUBSCRIBER');
@@ -111,7 +114,6 @@ const SocketProvider = (props: any) => {
       console.log(message);
       setMessages((messages) => [...messages, { message, username, time }]);
     });
-
   }, []);
 
   useEffect(() => {
@@ -120,20 +122,23 @@ const SocketProvider = (props: any) => {
       setUsersInRoom(response);
       return;
     });
-  }, [currentRoom])
-
-
+  }, [currentRoom]);
 
   socket.on('ROOMS', (value: any) => {
     setRooms(value);
   });
 
   socket.on('isTyping', (username: string) => {
-    if (username)
-      setIsTyping(`${username} is typing...`);
-      setTimeout(() => setIsTyping(''), 2000);
-    }
-  );
+    if (username) setIsTyping(`${username} is typing...`);
+    setTimeout(() => setIsTyping(''), 2000);
+  });
+
+  const createRoom = (roomName: string, username: string) => {
+    leaveRoom();
+    socket.emit("CREATE_ROOM", { roomName, username }, (response: string) => {
+      console.log(response)
+    });
+  }
 
   const leaveRoom = () => {
     console.log('LEAVE ROOM START');
@@ -156,12 +161,13 @@ const SocketProvider = (props: any) => {
         roomId,
         currentRoom,
         setCurrentRoom,
+        createRoom,
         leaveRoom,
         isTyping,
         messages,
         setMessages,
         allUsersOnline,
-        usersInRoom
+        usersInRoom,
       }}
       {...props}
     />
