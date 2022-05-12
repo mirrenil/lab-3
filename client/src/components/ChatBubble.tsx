@@ -36,7 +36,7 @@ const ChatBubble = (props: Props) => {
       {/* <span style={usernameStyle}>{username}</span> */}
       <div style={rootStyle}>
             <div style={textStyle}>
-            <div>
+            <div className= {username === "you" ? "you" : "message"}>
                   <span>
                     {props.username} - {props.time}
                   </span>

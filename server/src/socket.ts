@@ -79,7 +79,6 @@ function socket({ io }: { io: IOServer }) {
       socket.to(roomId).emit("ROOM_MESSAGE", {
         message,
         username,
-
         time:  moment().calendar(),
       })
        console.log(message, roomId, username);
