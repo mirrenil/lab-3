@@ -59,7 +59,7 @@ const SideBar = ({ children }: Props) => {
 
   return (
     <div className="sideBar-container">
-      <div>
+      <div style={{marginTop:"1rem"}}>
         <div className="usernameDiv">
           <div className="user-icon"> {username?.charAt(0)} </div>
           <h1 className="name">{username}</h1>
