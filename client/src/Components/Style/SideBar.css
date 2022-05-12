@@ -5,8 +5,9 @@
   background: linear-gradient(#222020, #202027);
   position: relative;
   height: 100%;
-  border: solid 5px rgba(31, 209, 241, 0.452);
   box-sizing: border-box;
+  top: 30px;
+  position: absolute;
 
 }
 
@@ -33,7 +34,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid #44c0d66b;
 }
 
 .usernameDiv h1 {
@@ -88,7 +88,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid #44c0d66b;
   min-height: 300px;
 }
 
@@ -110,7 +109,7 @@
   height: 50px;
   padding: 1em;
   color: #fff;
-  background-color: rgba(255, 255, 255, 0.496);
+  background-color: transparent;
   font-size: 1em;
   margin-bottom: .5em;
   margin-top: .2em;
@@ -125,11 +124,10 @@
 }
 
 .online-users-container {
-  /* display: flex;
+  display: flex;
   flex-direction: column;
-  justify-content: center; */
-  border-bottom: 1px solid #44c0d66b;
-  padding-left: 1em;
+  justify-content: center;
+  align-items: center;
   color: #f1f1f1;
   font-size: .8em;
 }
@@ -155,6 +153,7 @@
 .online-users-list {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .online-user {
@@ -181,6 +180,7 @@
 .room-users-container.active {
   display: block;
 }
+
 .none {
   background-color: rgba(236, 22, 22, 0.329);
 
