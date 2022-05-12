@@ -26,7 +26,8 @@ const rootstyle: CSSProperties = {
 const usernameInputDivStyle: CSSProperties = {
   position: "absolute",
   top: 0,
-  height: "100vh",
+  left: "0",
+  height: "122vh",
   width: "100%",
   background: "rgba(0, 0, 0, 0.9)",
   display: "flex",

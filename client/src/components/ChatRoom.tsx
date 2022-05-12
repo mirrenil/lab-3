@@ -81,7 +81,7 @@ const ChatRoom = () => {
            <Icon icon="bx:log-out" />
           </button>
       <div className="chat-container-header">
-      <p className="room-name">{currentRoom} Room Name</p>
+      {/* <p className="room-name">{currentRoom} Room Name</p> */}
       </div>
       <ScrollToBottom  className="message-container">
        {messages.map((message, index) => {
