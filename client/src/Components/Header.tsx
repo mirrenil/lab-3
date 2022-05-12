@@ -25,7 +25,7 @@ const headerStyle: CSSProperties = {
 backgroundColor: "#202027",
 display: "flex",
 justifyContent: "center",
-height: "8rem",
+height: "1rem",
 margin: "0",
 color: "white",
 }
