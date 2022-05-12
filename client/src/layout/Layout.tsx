@@ -7,7 +7,7 @@ function Layout() {
   return (
     <>
     <Header />
-     <div style={{display: 'flex', backgroundColor: "#222"}}>
+     <div style={{display: 'flex', backgroundColor: "#222", height: "100%"}}>
      <SideBar/>
      <Outlet />
      </div>
