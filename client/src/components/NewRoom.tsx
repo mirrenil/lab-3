@@ -10,7 +10,7 @@ type Modal = {
 
 const NewRoom = ({ open, onClose }: Modal) => {
   const [roomName, setNewRoomName] = useState<string>('');
-  const { socket, username } = useSockets();
+  const { socket, username, createRoom } = useSockets();
 
   const navigate = useNavigate();
 
@@ -24,7 +24,6 @@ const NewRoom = ({ open, onClose }: Modal) => {
     setNewRoomName(roomName)
     onClose();
     navigate('/chat');
-    console.log('Room created!');
     return;
   };
 
@@ -37,9 +36,10 @@ const NewRoom = ({ open, onClose }: Modal) => {
     if (!String(roomName).trim()) return;
 
     // emit room created event
-    socket.emit("CREATE_ROOM", { roomName, username }, (response: string) => {
-      console.log(response)
-    });
+    if (username) {
+      createRoom(roomName, username);
+    }
+    
     
     console.log(username);
     // set room name input to empty string
@@ -68,6 +68,7 @@ return ReactDOM.createPortal(
             </button>
           </form>
         </div>
+
         <button 
         style={closeButtonStyle}
         onClick={ () => onClose()}
@@ -131,7 +132,9 @@ const submitButtonStyle: CSSProperties = {
   backgroundColor: '#0acef123',
   color: '#FFFFFF',
   border: 'none',
-  marginLeft: '40%'
+
+
+
 };
 
 export default NewRoom;

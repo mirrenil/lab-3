@@ -2,7 +2,7 @@ import { CSSProperties } from "react";
 import { useSockets } from "../Context/Socket.context";
 
  const IsTyping = () => {
-    const { isTyping, username } = useSockets();
+    const { isTyping} = useSockets();
 
 
 
