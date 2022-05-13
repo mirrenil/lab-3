@@ -46,12 +46,12 @@ const SideBar = ({ children }: Props) => {
   //   );
   // }
 
-  const handleJoinRoom = (key: any) => {
-    socket.emit('JOIN_ROOM', key);
+  const handleJoinRoom = (id: any, name: any) => {
+    socket.emit('JOIN_ROOM', id, name);
 
     if (currentRoom) {
       socket.emit('LEAVE_ROOM', currentRoom, (response: string) => {
-        console.log(`${response} and joined ${key}`);
+        console.log(`${response} and joined ${id}`);
       });
     }
 
@@ -74,17 +74,16 @@ const SideBar = ({ children }: Props) => {
           <h5 className="available-rooms-header">Open rooms</h5>
 
           <ul className="rooms-list">
-            {Object.keys(rooms).map((key: any) => {
+            {rooms.map((room: any) => {
               return (
-                <div key={key}>
+                <div key={room.id}>
                   <button
-                    className='button room-list-button'
-
-                    disabled={key === roomId}
-                    onClick={() => handleJoinRoom(key)}
-                    title={`Join ${rooms[key].name}`}
+                    className={!usersInRoom ? "none":'button room-list-button'}
+                    disabled={room === roomId}
+                    onClick={() => handleJoinRoom(room.id, room.name)}
+                    title={`Join ${room.name}`}
                   >
-                    {rooms[key].name}
+                    {room.name}
                   </button>
                 </div>
               );
@@ -96,8 +95,7 @@ const SideBar = ({ children }: Props) => {
           <h5>online Users : {allUsersOnline.length}</h5>
           {allUsersOnline.map((user: any) => {
             return (
-
-              <div className='online-users-list' key={user.username}>
+                <div className='online-users-list' key={user.username}>
                 <p className="user-list-icon"> {user.username.charAt(0)} </p>
                 <h3 className='online-user'> {user.username} </h3>
               </div>

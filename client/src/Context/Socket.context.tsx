@@ -15,7 +15,7 @@ export interface Message {
 
 export interface Room {
   name: string;
-  // messages: Messages[];
+  id: string;
 }
 
 export interface ISocketContext {
@@ -36,6 +36,7 @@ export interface ISocketContext {
   sendMessage: Function;
   allUsersOnline: [];
   usersInRoom: [];
+  users: [],
 }
 
 const socket = io(SOCKET_URL, {
@@ -46,11 +47,11 @@ const SocketContext = createContext<ISocketContext>({
   socket,
   setUsername: () => false,
   setMessages: () => false,
-  //users: [],
+  users: [],
   rooms: [],
   currentRoom: '',
   setCurrentRoom: () => {},
-  createRoom: () => "",
+  createRoom: () => '',
   joinRoom: () => {},
   leaveRoom: () => {},
   isTyping: '',
@@ -67,6 +68,7 @@ const SocketProvider = (props: any) => {
   const [messages, setMessages] = useState(
     [] as { message: string; username: string; time: string }[]
   );
+  const [roomUseres, setRoomUsers] = useState<User[]>([])
   const [isTyping, setIsTyping] = useState<string>('');
   const [currentRoom, setCurrentRoom] = useState<string>('');
   const [newMessage, setNewMessage] = useState<string>('');
@@ -90,14 +92,11 @@ const SocketProvider = (props: any) => {
       navigate('/chat');
       setMessages([]);
     });
-
-
   }, []);
 
   useEffect(() => {
     const listener = (users: any) => {
       setAllUsersOnline(users);
-      console.log(users);
     };
     socket.on('allUsersOnline', listener);
     return () => {
@@ -105,28 +104,46 @@ const SocketProvider = (props: any) => {
     };
   }, []);
 
+  socket.on('allRooms', (roomsIds) => {
+    getRoomsWithUsers();
+    console.log(rooms);
+    for (let i = 0; i < roomsIds.length; i++) {
+      console.log(roomsIds[i]);
+      console.log(rooms[i]?.id);
+      // if (roomsIds[i] === rooms[i].id) {
+      //   newRoomslist.push(rooms[i]);
+      // }
+    }
+    // console.log(newRoomslist);
+    // setRooms(newRoomslist);
+  });
+
+  socket.on('ROOMS', (roomname: any, id: any) => {
+    if (roomname && id) {
+      setRooms([...rooms, { name: roomname, id: id }]);
+    } else return;
+    console.log(rooms);
+  });
+
   useEffect(() => {
-    console.log('ADD MESSAE SUBSCRIBER');
     socket.on('ROOM_MESSAGE', ({ message, username, time }) => {
       if (!document.hasFocus()) {
         document.title = `new message: ${message}`;
       }
-      console.log(message);
       setMessages((messages) => [...messages, { message, username, time }]);
     });
   }, []);
 
   useEffect(() => {
     socket.emit('usersInRoom', currentRoom, (response: any) => {
-      console.log(response);
       setUsersInRoom(response);
+      console.log(response.length);
+      
       return;
     });
-  }, [currentRoom]);
 
-  socket.on('ROOMS', (value: any) => {
-    setRooms(value);
-  });
+    getRoomsWithUsers();
+  }, [currentRoom, socket, username]);
 
   socket.on('isTyping', (username: string) => {
     if (username) setIsTyping(`${username} is typing...`);
@@ -135,18 +152,33 @@ const SocketProvider = (props: any) => {
 
   const createRoom = (roomName: string, username: string) => {
     leaveRoom();
-    socket.emit("CREATE_ROOM", { roomName, username }, (response: string) => {
-      console.log(response)
+    socket.emit('CREATE_ROOM', { roomName, username }, (response: string) => {
+      console.log(response);
     });
-  }
+  };
+
+  const getRoomsWithUsers = () => {
+    let newRoomsArray: Room[] = [];
+    for (let room of rooms) {
+      console.log(room);
+      socket.emit('usersInRoom', room.id, (response: any) => {
+        console.log(response);
+        if (response.length >= 1) {
+          newRoomsArray.push(room);
+        }
+        console.log('rooms', rooms);
+        console.log("newRoomsArray", newRoomsArray);
+        setRooms(newRoomsArray);
+      });
+    }
+    console.log(rooms);
+  };
 
   const leaveRoom = () => {
     console.log('LEAVE ROOM START');
     console.log(currentRoom);
     socket.emit('LEAVE_ROOM', currentRoom, (response: string) => {
-      console.log(response);
       setCurrentRoom('');
-      console.log(currentRoom);
       console.log('LEAVE ROOM END');
     });
   };
@@ -168,6 +200,7 @@ const SocketProvider = (props: any) => {
         setMessages,
         allUsersOnline,
         usersInRoom,
+        roomUseres
       }}
       {...props}
     />

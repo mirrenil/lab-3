@@ -105,7 +105,7 @@
   height: 50px;
   padding: 1em;
   color: #fff;
-  background-color: transparent;
+  background-color: rgba(255, 255, 255, 0.135);
   font-size: 1em;
   margin-bottom: .5em;
   margin-top: .2em;
@@ -178,6 +178,6 @@
 }
 
 .none {
-  background-color: rgba(236, 22, 22, 0.329);
+  display: none;
 
 }
