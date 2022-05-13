@@ -37,13 +37,13 @@ Run two seperate terminals, one for the server and one for the client.
 
 [x] Samtliga rum skall vara synligt i en lista.
 
-[] De går att gå med i ett rum genom att klicka på det i listan.
+[x] De går att gå med i ett rum genom att klicka på det i listan.
 
 [] När en användare går med i ett nytt rum ska befintligt rum lämnas automatiskt.
 
-[] Användare ska kunna skicka och läsa nya meddelanden i rummet de har gått med i.
+[x] Användare ska kunna skicka och läsa nya meddelanden i rummet de har gått med i.
 
-[] När en användare håller på att skriva ett meddelande skall det synas för alla andra i rummet.
+[x] När en användare håller på att skriva ett meddelande skall det synas för alla andra i rummet.
 
 [x] Git & GitHub har använts.
 
