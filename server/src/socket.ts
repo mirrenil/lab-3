@@ -2,7 +2,6 @@ import { Socket } from "socket.io";
 import { nanoid } from "nanoid";
 import moment from "moment";
 import type { IOServer } from "./server";
-import {getRooms} from './roomStore'
 
 const rooms: Record<string, { name: string }> = {};
 
@@ -23,7 +22,6 @@ function socket({ io }: { io: IOServer }) {
   });
 
   io.on("connection", (socket: Socket) => {
-
     const users = [];
     for (let [id, socket] of io.of("/").sockets) {
       users.push({
@@ -45,10 +43,9 @@ function socket({ io }: { io: IOServer }) {
       };
       fetchUsers();
       // callback(roomUsers);
-      const test = getRooms(io);
-      console.log(test);
+      // const test = getRooms(io);
+      // console.log(test);
     });
-
 
     // const renderUsersInRoom = async (room: string) => {
     //   let roomUsers = await io.in(room).fetchSockets();
@@ -82,9 +79,9 @@ function socket({ io }: { io: IOServer }) {
       socket.to(roomId).emit("ROOM_MESSAGE", {
         message,
         username,
-        time:  moment().calendar(),
-      })
-       console.log(message, roomId, username);
+        time: moment().calendar(),
+      });
+      console.log(message, roomId, username);
     });
 
     socket.emit("connected", socket.data.username);
