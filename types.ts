@@ -17,6 +17,7 @@ export interface ServerToClientEvents {
   isTyping: (username: string) => void;
   allUsersOnline: (users: User[]) => void;
   usersInRoom: (response: string) => void;
+  UPDATED_ROOMS_LIST: (a: string[]) => void;
   
 }
 

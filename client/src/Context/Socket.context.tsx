@@ -15,6 +15,7 @@ export interface Message {
 
 export interface Room {
   name: string;
+  id?: string;
   // messages: Messages[];
 }
 
@@ -91,6 +92,16 @@ const SocketProvider = (props: any) => {
       setMessages([]);
     });
 
+    socket.on("UPDATED_ROOMS_LIST", (fetchedRooms) => {
+      console.log(fetchedRooms);
+      console.log(rooms);
+      for (let i = 0; i < rooms.length; i++) {
+         for (let room of fetchedRooms) {
+          console.log("fetched room: ", room)
+          console.log(rooms[i].id);
+        }
+      }
+    })
 
   }, []);
 

@@ -3,25 +3,52 @@ import { nanoid } from "nanoid";
 import moment from "moment";
 import type { IOServer } from "./server";
 
-const rooms: Record<string, { name: string }> = {};
+const rooms = <any>[];
+
+
+  function getRooms(io: IOServer) {
+    const roomsList: string[] = [];
+
+    for (let [key, value] of io.sockets.adapter.rooms) {
+      console.log("-ADAPTER ROOMS:-")
+      console.log(io.sockets.adapter.rooms);
+      console.log("---------------")
+      console.log("key: ", key);
+      console.log("value: ", value);
+      console.log("---------------")
+
+      console.log(!value.has(key));
+
+      if (!value.has(key)) {
+        console.log(key);
+        roomsList.push(key);
+      }
+    }
+    return roomsList;
+  }
 
 function socket({ io }: { io: IOServer }) {
-  console.log("in function socket");
+
+
 
   io.use((socket: Socket, next) => {
-    console.log("in io.use");
+
     const username: string = socket.handshake.auth.username;
-    console.log(username);
+
     if (!username) {
       return next(new Error("invalid username"));
     }
 
     socket.data.username = username;
-    console.log("socket.data.username: " + socket.data.username);
+
     next();
   });
 
   io.on("connection", (socket: Socket) => {
+
+    let activeRooms = getRooms(io);
+    // console.log("active rooms: ", activeRooms);
+
     const users = [];
     for (let [id, socket] of io.of("/").sockets) {
       users.push({
@@ -58,16 +85,24 @@ function socket({ io }: { io: IOServer }) {
     socket.emit("ROOMS", rooms);
 
     socket.on("CREATE_ROOM", ({ roomName }, callback) => {
-      console.log("in create room");
-      console.log({ roomName });
+
       const roomId = nanoid();
-      rooms[roomId] = {
+
+      // rooms[roomId] = {
+      //   name: roomName,
+      // };
+
+      rooms.push({
         name: roomName,
-      };
+        id: roomId
+      })
+
       socket.join(roomId);
       //broadcast
       socket.broadcast.emit("ROOMS", rooms);
 
+      let activeRooms = getRooms(io);
+      io.emit("UPDATED_ROOMS_LIST", activeRooms);
       // emit back to the room creator
       socket.emit("ROOMS", rooms);
       socket.emit("JOINED_ROOM", roomId);
@@ -81,19 +116,12 @@ function socket({ io }: { io: IOServer }) {
         username,
         time: moment().calendar(),
       });
-      console.log(message, roomId, username);
+
     });
 
     socket.emit("connected", socket.data.username);
 
-    // socket.on('chat-message', (message) => {
-    //   console.log(message);
-    //   // io.emit('chat message', message);
-    // });
-
     socket.on("JOIN_ROOM", (roomId) => {
-      console.log(roomId);
-      console.log(socket.data.username);
       socket.join(roomId);
 
       socket.emit("JOINED_ROOM", roomId);
@@ -106,14 +134,19 @@ function socket({ io }: { io: IOServer }) {
     // CALLBACK NOT WORKING!!
     socket.on("LEAVE_ROOM", (room, callback) => {
       socket.leave(room);
-      console.log(`${socket.data.username} has left room ${room}`);
+
+      let activeRooms = getRooms(io);
+      io.emit("UPDATED_ROOMS_LIST", activeRooms);
+
       callback(`${socket.data.username} has left room`);
     });
 
     socket.on("isTyping", (room) => {
       socket.broadcast.to(room).emit("isTyping", socket.data.username);
-      console.log("isTyping");
+
     });
+
+
   });
 }
 
