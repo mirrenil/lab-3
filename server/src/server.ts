@@ -31,6 +31,7 @@ const io = new Server<
 });
 
 export type IOServer = typeof io;
+export type IOSocket = Socket<ClientToServerEvents, ServerToClientEvents>;
 
 app.get("/", (_, res) => res.send(`Server is up and running`));
 

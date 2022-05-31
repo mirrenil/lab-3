@@ -2,21 +2,16 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client';
 import { SOCKET_URL } from '../config/default';
-import { ServerToClientEvents, ClientToServerEvents } from '../../../types';
+import { ServerToClientEvents, ClientToServerEvents, Message } from '../../../types';
 
 export interface User {
   userId: string;
   username: string;
 }
-export interface Message {
-  author: User;
-  body: string;
-}
 
 export interface Room {
   name: string;
   id?: string;
-  // messages: Messages[];
 }
 
 export interface ISocketContext {
@@ -26,7 +21,7 @@ export interface ISocketContext {
   //users: User[];
   messages: { message: string; time: string; username: string }[];
   setMessages: Function;
-  rooms: Room[];
+  rooms: string[];
   roomId?: string;
   currentRoom: string;
   setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
@@ -65,9 +60,7 @@ const SocketProvider = (props: any) => {
   const [username, setUsername] = useState<string>('');
   const [rooms, setRooms] = useState<string[]>([]);
   const [roomId, setRoomId] = useState({});
-  const [messages, setMessages] = useState(
-    [] as { message: string; username: string; time: string }[]
-  );
+  const [messages, setMessages] = useState<Message[]>([])
   const [isTyping, setIsTyping] = useState<string>('');
   const [currentRoom, setCurrentRoom] = useState<string>('');
   const [newMessage, setNewMessage] = useState<string>('');
@@ -106,13 +99,13 @@ const SocketProvider = (props: any) => {
   }, []);
 
   useEffect(() => {
-    console.log('ADD MESSAE SUBSCRIBER');
-    socket.on('ROOM_MESSAGE', ({ message, username, time }) => {
+    // console.log('ADD MESSAE SUBSCRIBER');
+    socket.on('ROOM_MESSAGE', (message) => {
       if (!document.hasFocus()) {
         document.title = `new message: ${message}`;
       }
       console.log(message);
-      setMessages((messages) => [...messages, { message, username, time }]);
+      setMessages((messages) => [...messages, message]);
     });
   }, []);
 
@@ -125,9 +118,9 @@ const SocketProvider = (props: any) => {
   // }, [currentRoom]);
 
   useEffect(() => {
-    const listener = (value: string[]) => {
-      setRooms([]);
-      setRooms(value);
+    const listener = (rooms: string[]) => {
+      console.log(rooms);
+      setRooms(rooms);
     };
     
     socket.on('ROOMS', listener);
@@ -148,9 +141,7 @@ const SocketProvider = (props: any) => {
     leaveRoom();
 
     //Behöver ändras här eller i types.ts
-    socket.emit("CREATE_ROOM", { roomName, username }, (response: string) => {
-      console.log(response)
-    });
+    socket.emit("CREATE_ROOM", roomName);
   }
 
   const leaveRoom = () => {
@@ -158,12 +149,8 @@ const SocketProvider = (props: any) => {
     console.log(currentRoom);
 
     //Behöver ändras här eller i types.ts
-    socket.emit('LEAVE_ROOM', currentRoom, (response: string) => {
-      console.log(response);
-      setCurrentRoom('');
-      console.log(currentRoom);
-      console.log('LEAVE ROOM END');
-    });
+    socket.emit('LEAVE_ROOM', currentRoom);
+    setCurrentRoom('');
   };
 
   return (

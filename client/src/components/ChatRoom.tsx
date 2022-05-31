@@ -11,9 +11,6 @@ import { AiOutlineSend } from 'react-icons/ai'
 import ScrollToBottom from "react-scroll-to-bottom";
 
 
-
-
-
 const ChatRoom = () => {
   const [value, setValue] = useState<string>('');
   const navigate = useNavigate();
@@ -39,7 +36,8 @@ const ChatRoom = () => {
   }
 
   function handleSendMessage(e: any) {
-    const message = newMessageRef.current?.value;
+    if (!roomId || !username) return;
+    const message = newMessageRef.current?.value || "";
 
     e.preventDefault();
     // const message = value

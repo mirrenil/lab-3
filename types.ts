@@ -1,14 +1,17 @@
-export interface User { 
-  userId: string,
-  username?: string
+export interface User {
+  userId: string;
+  username?: string;
 }
 
 export interface Message {
-  // { message, username, time }
+  message: string;
+  time?: string;
+  roomId: string;
+  username: string;
 }
 
 export interface ServerToClientEvents {
-  ROOM_MESSAGE: ( from: {message: string, time: string, username: string}) => void;
+  ROOM_MESSAGE: (message: Message) => void;
   connected: (username: string) => void;
   roomList: (rooms: string[]) => void;
   JOINED_ROOM: (room: string) => void;
@@ -16,23 +19,20 @@ export interface ServerToClientEvents {
   _error: (errorMessage: string) => void;
   isTyping: (username: string) => void;
   allUsersOnline: (users: User[]) => void;
-  usersInRoom: (response: string) => void;
   ROOMS: (a: string[]) => void;
 }
 
 export interface ClientToServerEvents {
-  CREATE_ROOM: (from: {roomName: string, username: string}, response: string) => void;
-  message: (message: string, to: string) => void;
-  join: (room: string) => void;
+  CREATE_ROOM: (roomName: string) => void;
+  SEND_ROOM_MESSAGE: (from: Message) => void;
+  JOIN_ROOM: (room: string) => void;
   leave: (rooms: string) => void;
-  typing: () => void;
+  isTyping: (room: string) => void;
   usersInRoom: (response: string) => void;
-  LEAVE_ROOM: (room: string, response: string ) => void;
+  LEAVE_ROOM: (room: string) => void;
 }
 
-export interface InterServerEvents {
-  
-}
+export interface InterServerEvents {}
 
 export interface ServerSocketData {
   username: string;
